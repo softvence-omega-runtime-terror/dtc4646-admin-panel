@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --background-color: #0D1117;
+  --primary-color: #00FFFF;
+  --cta-btn-color: #00FF7F;
+  --accent-color: #FF00FF;
+  --font-color: #FFFFFF;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
