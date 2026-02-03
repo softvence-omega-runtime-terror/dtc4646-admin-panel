@@ -28,8 +28,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   // navItems same as before
   const navItems: NavItem[] = [
     {
-      id: "overview",
-      label: "Overview",
+      id: "User",
+      label: "Users",
       icon: (
         <OverviewIcon
           isActive={
@@ -77,9 +77,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     <>
       {/* Overlay for mobile */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         onClick={onClose}
       ></div>
 
@@ -95,12 +94,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="p-6 border-b-[2px] border-white/24 h-[110px] flex justify-between items-center">
           <Link href="/dashboard">
             {" "}
-            <Image
+            {/* <Image
               src="/images/logo.png"
               alt="Polymath Logo"
               width={188}
               height={46}
-            />
+            /> */}
+            <h1 className="text-2xl font-bold text-white">InterviewFIo</h1>
           </Link>
           {/* Close button for mobile */}
           <button
@@ -119,18 +119,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <Link
                   href={item.href}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200
-                    ${
-                      isActive(item.href)
-                        ? "text-black"
-                        : "text-teal-200 hover:bg-teal-700 text-white"
+                    ${isActive(item.href)
+                      ? "text-black"
+                      : "text-teal-200 hover:bg-teal-700 text-white"
                     }
                   `}
                   style={
                     isActive(item.href)
                       ? {
-                          background:
-                            "linear-gradient(to right, #00FF7F, #00C260)",
-                        }
+                        background:
+                          "linear-gradient(to right, #00FF7F, #00C260)",
+                      }
                       : {}
                   }
                 >
