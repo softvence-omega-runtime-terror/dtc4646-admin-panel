@@ -2,7 +2,7 @@ interface Props {
     isActive: boolean;
 }
 const OverviewIcon:React.FC<Props> = ({isActive}) => {
-    const strokeColor = isActive ? "#0D1117" : "#00FFFF";
+    const strokeColor = isActive ? "white" : "#5835C0";
     return (
         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 18.5C2 16.9596 2 16.1893 2.34673 15.6235C2.54074 15.3069 2.80693 15.0407 3.12353 14.8467C3.68934 14.5 4.45956 14.5 6 14.5C7.54044 14.5 8.31066 14.5 8.87647 14.8467C9.19307 15.0407 9.45926 15.3069 9.65327 15.6235C10 16.1893 10 16.9596 10 18.5C10 20.0404 10 20.8107 9.65327 21.3765C9.45926 21.6931 9.19307 21.9593 8.87647 22.1533C8.31066 22.5 7.54044 22.5 6 22.5C4.45956 22.5 3.68934 22.5 3.12353 22.1533C2.80693 21.9593 2.54074 21.6931 2.34673 21.3765C2 20.8107 2 20.0404 2 18.5Z" stroke={strokeColor} stroke-width="1.5" />

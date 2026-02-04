@@ -28,8 +28,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   // navItems same as before
   const navItems: NavItem[] = [
     {
-      id: "User",
-      label: "Users",
+      id: "Overview",
+      label: "Overview",
       icon: (
         <OverviewIcon
           isActive={
@@ -64,6 +64,31 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       icon: <Settings isActive={pathname === "/dashboard/settings"} />,
       href: "/dashboard/settings",
     },
+    {
+      id: "users",
+      label: "Users",
+      icon: <Settings isActive={pathname === "/dashboard/users"} />,
+      href: "/dashboard/users",
+    },
+
+    {
+      id: "form",
+      label: "Form",
+      icon: <Settings isActive={pathname === "/dashboard/form"} />,
+      href: "/dashboard/form",
+    },
+    {
+      id: "model",
+      label: "Model",
+      icon: <Settings isActive={pathname === "/dashboard/model"} />,
+      href: "/dashboard/model",
+    },
+    {
+      id: "profile",
+      label: "Profile",
+      icon: <Settings isActive={pathname === "/dashboard/profile"} />,
+      href: "/dashboard/profile",
+    },
   ];
 
   // Function to check if a nav item is active
@@ -77,21 +102,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     <>
       {/* Overlay for mobile */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
         onClick={onClose}
       ></div>
 
       <aside
         className={`
-          fixed z-50 top-0 left-0 h-full w-[230px] bg-[#003D3D] flex flex-col rounded-r-[30px]
+          fixed z-50 top-0 left-0 h-full w-[230px] border border-r-stone-300 bg-white flex flex-col 
           transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 md:static
         `}
       >
         {/* Logo */}
-        <div className="p-6 border-b-[2px] border-white/24 h-[110px] flex justify-between items-center">
+        <div className="p-6 h-[110px] flex justify-between items-center">
           <Link href="/dashboard">
             {" "}
             {/* <Image
@@ -100,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               width={188}
               height={46}
             /> */}
-            <h1 className="text-2xl font-bold text-white">InterviewFIo</h1>
+            <h1 className="text-2xl font-bold text-[#7D68BC]">InterviewFIo</h1>
           </Link>
           {/* Close button for mobile */}
           <button
@@ -119,17 +145,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <Link
                   href={item.href}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200
-                    ${isActive(item.href)
-                      ? "text-black"
-                      : "text-teal-200 hover:bg-teal-700 text-white"
+                    ${
+                      isActive(item.href)
+                        ? "text-white"
+                        : "text-black hover:bg-gradient-to-r hover:from-[#A78BFA] hover:to-[#5835C0] hover:text-white"
                     }
                   `}
                   style={
                     isActive(item.href)
                       ? {
-                        background:
-                          "linear-gradient(to right, #00FF7F, #00C260)",
-                      }
+                          background:
+                            "linear-gradient(to right, #A78BFA, #5835C0)",
+                        }
                       : {}
                   }
                 >
