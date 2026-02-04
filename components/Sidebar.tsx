@@ -9,6 +9,10 @@ import History from "./icons/History";
 import Keywords from "./icons/Keywords";
 import OverviewIcon from "./icons/Overview";
 import Settings from "./icons/Settings";
+import Profile from "./icons/Profile";
+import Model from "./icons/Model";
+import Form from "./icons/Form";
+import Users from "./icons/Users";
 
 interface NavItem {
   id: string;
@@ -67,26 +71,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       id: "users",
       label: "Users",
-      icon: <Settings isActive={pathname === "/dashboard/users"} />,
+      icon: <Users isActive={pathname === "/dashboard/users"} />,
       href: "/dashboard/users",
     },
 
     {
       id: "form",
       label: "Form",
-      icon: <Settings isActive={pathname === "/dashboard/form"} />,
+      icon: <Form isActive={pathname === "/dashboard/form"} />,
       href: "/dashboard/form",
     },
     {
       id: "model",
       label: "Model",
-      icon: <Settings isActive={pathname === "/dashboard/model"} />,
+      icon: <Model isActive={pathname === "/dashboard/model"} />,
       href: "/dashboard/model",
     },
+
     {
       id: "profile",
       label: "Profile",
-      icon: <Settings isActive={pathname === "/dashboard/profile"} />,
+      icon: <Profile isActive={pathname === "/dashboard/profile"} />,
       href: "/dashboard/profile",
     },
   ];
@@ -117,21 +122,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         `}
       >
         {/* Logo */}
-        <div className="p-6 h-[110px] flex justify-between items-center">
-          <Link href="/dashboard">
-            {" "}
+        <div className="h-[110px] flex justify-center items-center mt-4">
+          <Link href="/dashboard" className="flex flex-col items-center ">
             {/* <Image
               src="/images/logo.png"
               alt="Polymath Logo"
               width={188}
               height={46}
             /> */}
+            <Image
+              src="/images/logo-2.png"
+              alt="Polymath Logo"
+              width={80}
+              height={46}
+            />
+
             <h1 className="text-2xl font-bold text-[#7D68BC]">InterviewFIo</h1>
           </Link>
           {/* Close button for mobile */}
           <button
             onClick={onClose}
-            className="text-white ms-4 md:ms-0 md:hidden"
+            className="text-black ms-4 md:ms-0 md:hidden"
           >
             <X size={24} />
           </button>

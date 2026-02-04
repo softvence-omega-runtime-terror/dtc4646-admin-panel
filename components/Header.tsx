@@ -79,7 +79,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const user = userInfo ? JSON.parse(userInfo) : null;
 
   return (
-    <header className="relative h-[110px] bg-[#fff] ps-4 md:ps-8 pe-4 md:pe-12 py-4 flex items-center justify-between border border-b-stone-300">
+    <header
+      className="relative bg-[#fff] ps-8 pe-8 sm:ps-8 sm:pe-8 py-4
+flex items-center justify-between border border-b-stone-300"
+    >
       <div className="absolute bottom-0 left-4 md:left-8 right-4 md:right-12 h-[2px] bg-white/24" />
 
       <div className="flex items-center space-x-3 z-10">
@@ -106,11 +109,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <span className="text-[#00FFFF] text-xl md:text-[24px] font-normal">
-              {user?.username}
+            <span className="text-[#7D68BC] text-xl md:text-[24px] font-normal">
+              {user?.username} arif 
             </span>
             <svg
-              className={`w-4 h-4 text-gray-400 transition-transform ${
+              className={`w-4 h-4 text-[#7D68BC] transition-transform ${
                 isProfileOpen ? "rotate-180" : ""
               }`}
               fill="currentColor"
@@ -124,8 +127,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             </svg>
           </button>
 
-          {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-[#0D1117] rounded-xl shadow-xl border border-gray-700 z-50">
+          {/* {isProfileOpen && (
+            <div className="absolute right-0 mt-2 w-64 bg-gradient-to-b from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-xl shadow-xl border border-[#A78BFA] z-50">
               <div className="px-5 py-5 flex flex-col items-center">
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#5835C0] shadow-md">
                   <Image
@@ -139,14 +142,14 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
                 <div className="mt-4 w-full text-left space-y-2">
                   <div>
-                    <p className="text-[#00FFFF] font-medium text-sm">Name</p>
-                    <p className="text-white font-semibold text-sm">
-                      {user?.username}
+                    <p className="text-[#7D68BC] font-medium text-sm">Name</p>
+                    <p className="text-black font-semibold text-sm">
+                      {user?.role}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[#00FFFF] font-medium text-sm">Email</p>
-                    <p className="text-white break-all text-sm">
+                    <p className="text-[#7D68BC] font-medium text-sm">Email</p>
+                    <p className="text-black break-all text-sm">
                       {user?.email}
                     </p>
                   </div>
@@ -154,7 +157,84 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </div>
               <div className="px-5 pb-4">
                 <button
-                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                  className="w-full bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white font-medium py-2 px-4 rounded-md transition-colors"
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          )} */}
+
+          {isProfileOpen && (
+            <div className="absolute right-0 mt-2 w-80 bg-gradient-to-b from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-xl shadow-xl border border-[#A78BFA] z-50">
+              <div className="px-6 py-5 border-b border-[#A78BFA]/30">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#5835C0] shadow-md flex-shrink-0">
+                    <Image
+                      src="/images/user-avatar.png"
+                      alt="User Avatar"
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-black font-bold text-base truncate">
+                      {user?.username}Arifur Rahman
+                    </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="px-2 py-0.5 bg-[#5835C0] text-white text-xs font-medium rounded-full">
+                        {user?.role}
+                      </span>
+                      <span
+                        className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                          user?.status === "active"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-600"
+                        }`}
+                      >
+                        {user?.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-6 py-4 space-y-3">
+                <div>
+                  <p className="text-[#7D68BC] font-medium text-xs mb-1">
+                    Email Address
+                  </p>
+                  <p className="text-black text-sm break-all">{user?.email}</p>
+                </div>
+
+                <div>
+                  <p className="text-[#7D68BC] font-medium text-xs mb-1">
+                    Email Status
+                  </p>
+                  <div className="flex items-center gap-2">
+                    {user?.isEmailVerified ? (
+                      <>
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span className="text-green-700 text-sm font-medium">
+                          Verified
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                        <span className="text-gray-600 text-sm">
+                          Not Verified
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="px-6 pb-5 pt-2 border-t border-[#A78BFA]/30 space-y-2">
+                <button
+                  className="w-full bg-gradient-to-r from-[#A78BFA] to-[#5835C0] hover:from-[#9370DB] hover:to-[#4B2DA8] text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm"
                   onClick={handleSignOut}
                 >
                   Sign Out
