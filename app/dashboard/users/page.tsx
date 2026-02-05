@@ -58,11 +58,11 @@ export default function page() {
     <div className="p-8">
       <div>
         {/* Header */}
-        <div className="flex justify-end mb-6">
+        {/* <div className="flex justify-end mb-6">
           <button className="bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors">
             Create User
           </button>
-        </div>
+        </div> */}
 
         {/* Controls Bar */}
         <div className="bg-white rounded-t-lg p-4 flex items-center justify-between border-b border-gray-200">
