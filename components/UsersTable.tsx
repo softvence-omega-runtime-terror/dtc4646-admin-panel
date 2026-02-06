@@ -237,6 +237,7 @@ const handleDeleteSelected = async () => {
 
       {/* Table */}
       <div className="bg-white overflow-hidden">
+         <div className="w-full overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -345,6 +346,7 @@ const handleDeleteSelected = async () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Footer */}

@@ -1,25 +1,23 @@
 import { getAdminUsersCount } from "@/lib/api/adminUsers";
 import { getAIConfig } from "@/lib/api/aiConfig";
-import { Bot, Cpu, FileText, Sparkles, ChevronRight } from "lucide-react";
+import { Bot, Cpu, FileText, Sparkles } from "lucide-react";
 
 export default async function Page() {
   const config = await getAIConfig();
   const total = await getAdminUsersCount();
 
-  // Assuming your API will return multiple AI configs in an array
-  // For now, we'll create an array with the single config
-  const aiConfigs = Array.isArray(config.data) ? config.data : [config.data];
+  const aiConfig = config.data;
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Overview of your AI configurations</p>
+        <p className="text-gray-600">Overview of your AI configuration</p>
       </div>
 
       {/* Stats Card */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
@@ -35,9 +33,9 @@ export default async function Page() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">AI Providers</p>
-              <h3 className="text-3xl font-bold text-gray-900">
-                {aiConfigs.length}
+              <p className="text-sm text-gray-600 mb-1">AI Provider</p>
+              <h3 className="text-2xl font-bold text-gray-900 capitalize">
+                {aiConfig?.ai_provider || "N/A"}
               </h3>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -51,7 +49,7 @@ export default async function Page() {
             <div>
               <p className="text-sm text-gray-600 mb-1">Active Model</p>
               <h3 className="text-lg font-bold text-gray-900">
-                {aiConfigs[0]?.ai_model || "N/A"}
+                {aiConfig?.ai_model || "N/A"}
               </h3>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -63,9 +61,9 @@ export default async function Page() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Configurations</p>
-              <h3 className="text-3xl font-bold text-gray-900">
-                {aiConfigs.length}
+              <p className="text-sm text-gray-600 mb-1">Prompt Type</p>
+              <h3 className="text-lg font-bold text-gray-900">
+                {aiConfig?.system_prompt_name || "N/A"}
               </h3>
             </div>
             <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -75,107 +73,91 @@ export default async function Page() {
         </div>
       </div>
 
-      {/* AI Configurations Section */}
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">AI Configurations</h2>
-        <button className="px-4 py-2 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
-          + Add New AI
-        </button>
+      {/* AI Configuration Section */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">AI Configuration</h2>
       </div>
 
-      {/* AI Config Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {aiConfigs.map((aiConfig, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
-          >
-            {/* Card Header */}
-            <div className="bg-gradient-to-r from-[#A78BFA] to-[#5835C0] p-6">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <Bot className="text-white" size={24} />
+      {/* AI Config Card - Full Width */}
+      {aiConfig ? (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          {/* Card Header */}
+          <div className="bg-gradient-to-r from-[#A78BFA] to-[#5835C0] p-6 md:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Bot className="text-white" size={32} />
                 </div>
-                <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-xs font-medium">
-                  Active
-                </span>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white capitalize">
+                    {aiConfig.ai_provider}
+                  </h3>
+                  <p className="text-purple-100 text-sm md:text-base mt-1">
+                    {aiConfig.system_prompt_name}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-white capitalize">
-                {aiConfig.ai_provider}
-              </h3>
-              <p className="text-purple-100 text-sm mt-1">
-                {aiConfig.system_prompt_name}
-              </p>
+              <span className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium self-start sm:self-auto">
+                Active
+              </span>
             </div>
+          </div>
 
-            {/* Card Body */}
-            <div className="p-6">
+          {/* Card Body */}
+          <div className="p-6 md:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
               {/* Model Info */}
-              <div className="mb-4">
-                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3 block">
                   Model
                 </label>
-                <div className="flex items-center gap-2">
-                  <Cpu size={16} className="text-gray-400" />
-                  <span className="text-sm font-medium text-gray-900">
+                <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg">
+                  <Cpu size={20} className="text-gray-400 flex-shrink-0" />
+                  <span className="text-base font-medium text-gray-900">
                     {aiConfig.ai_model}
                   </span>
                 </div>
               </div>
 
               {/* Prompt Name */}
-              <div className="mb-4">
-                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3 block">
                   Prompt Configuration
                 </label>
-                <div className="flex items-center gap-2">
-                  <FileText size={16} className="text-gray-400" />
-                  <span className="text-sm font-medium text-gray-900">
+                <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg">
+                  <FileText size={20} className="text-gray-400 flex-shrink-0" />
+                  <span className="text-base font-medium text-gray-900">
                     {aiConfig.system_prompt_name}
                   </span>
                 </div>
               </div>
+            </div>
 
-              {/* System Prompt Preview */}
-              <div className="mb-6">
-                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">
-                  System Prompt
-                </label>
-                <p className="text-sm text-gray-600 line-clamp-3 bg-gray-50 p-3 rounded-lg">
+            {/* System Prompt */}
+            <div>
+              <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3 block">
+                System Prompt
+              </label>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 md:p-6">
+                <p className="text-gray-700 leading-relaxed">
                   {aiConfig.system_prompt}
                 </p>
               </div>
-
-              {/* Actions */}
-              <div className="flex gap-2">
-                <button className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm">
-                  Edit
-                </button>
-                <button className="flex-1 px-4 py-2 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white rounded-lg font-medium hover:opacity-90 transition-opacity text-sm flex items-center justify-center gap-1">
-                  View Details
-                  <ChevronRight size={16} />
-                </button>
-              </div>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Empty State (if no configs) */}
-      {aiConfigs.length === 0 && (
+        </div>
+      ) : (
+        /* Empty State */
         <div className="bg-white rounded-xl p-12 text-center border border-gray-100">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Bot className="text-gray-400" size={32} />
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">
-            No AI Configurations Yet
+            No AI Configuration Found
           </h3>
-          <p className="text-gray-600 mb-6">
-            Get started by adding your first AI configuration
+          <p className="text-gray-600">
+            Please set up your AI configuration to get started
           </p>
-          <button className="px-6 py-3 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
-            + Add AI Configuration
-          </button>
         </div>
       )}
     </div>

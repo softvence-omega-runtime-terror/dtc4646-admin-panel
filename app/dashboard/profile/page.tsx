@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Camera, Edit, Lock, X } from "lucide-react";
+import { Lock, X } from "lucide-react";
 import Cookies from "js-cookie";
 import { getUserProfile } from "@/lib/api/userProfile";
 import { changePassword } from "@/lib/api/changePassword";
@@ -16,8 +16,6 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  console.log("-------profile------", user);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -58,26 +56,28 @@ export default function Page() {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-screen">
       {/* Profile Header Card */}
-      <div className="bg-white rounded-2xl p-8 mb-6 shadow-sm">
-        <div className="flex items-center gap-6">
+      <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
           {/* Avatar Placeholder */}
-          <div className="relative">
-            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#A78BFA] to-[#5835C0] flex items-center justify-center text-white text-4xl font-bold ring-4 ring-gray-100">
+          <div className="relative flex-shrink-0">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full bg-gradient-to-br from-[#A78BFA] to-[#5835C0] flex items-center justify-center text-white text-3xl sm:text-4xl font-bold ring-4 ring-gray-100">
               {user.email.charAt(0).toUpperCase()}
             </div>
           </div>
 
           {/* User Info */}
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">
+          <div className="flex-1 text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 break-words">
               {user.email}
             </h1>
-            <p className="text-gray-600 text-lg mb-2">{user.role}</p>
+            <p className="text-gray-600 text-base sm:text-lg mb-2">
+              {user.role}
+            </p>
 
             {/* Status Badges */}
-            <div className="flex gap-2 mt-3">
+            <div className="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start">
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${
                   user.status === "active"
@@ -98,14 +98,14 @@ export default function Page() {
       </div>
 
       {/* Account Information Card */}
-      <div className="bg-white rounded-2xl p-8 shadow-sm">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">
+      <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Account Information
           </h2>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] hover:opacity-90 text-white px-6 py-2.5 rounded-lg font-medium transition-opacity"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] hover:opacity-90 text-white px-4 sm:px-6 py-2.5 rounded-lg font-medium transition-opacity w-full sm:w-auto"
           >
             <Lock size={18} />
             Change Password
@@ -113,13 +113,15 @@ export default function Page() {
         </div>
 
         {/* Information Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-12 lg:gap-y-8">
           {/* Email Address */}
           <div>
             <label className="text-sm text-gray-500 mb-2 block">
               Email Address
             </label>
-            <p className="text-lg font-medium text-gray-900">{user.email}</p>
+            <p className="text-base sm:text-lg font-medium text-gray-900 break-words">
+              {user.email}
+            </p>
           </div>
 
           {/* User Role */}
@@ -127,7 +129,9 @@ export default function Page() {
             <label className="text-sm text-gray-500 mb-2 block">
               User Role
             </label>
-            <p className="text-lg font-medium text-gray-900">{user.role}</p>
+            <p className="text-base sm:text-lg font-medium text-gray-900">
+              {user.role}
+            </p>
           </div>
 
           {/* Account Status */}
@@ -135,15 +139,15 @@ export default function Page() {
             <label className="text-sm text-gray-500 mb-2 block">
               Account Status
             </label>
-            <p className="text-lg font-medium text-gray-900 capitalize">
+            <p className="text-base sm:text-lg font-medium text-gray-900 capitalize">
               {user.status}
             </p>
           </div>
 
           {/* User ID */}
-          <div className="md:col-span-3">
+          <div className="sm:col-span-2 lg:col-span-3">
             <label className="text-sm text-gray-500 mb-2 block">User ID</label>
-            <p className="text-sm font-mono text-gray-900 break-all">
+            <p className="text-xs sm:text-sm font-mono text-gray-900 break-all">
               {user.id}
             </p>
           </div>
@@ -153,7 +157,7 @@ export default function Page() {
             <label className="text-sm text-gray-500 mb-2 block">
               Account Created
             </label>
-            <p className="text-lg font-medium text-gray-900">
+            <p className="text-base sm:text-lg font-medium text-gray-900">
               {formatDate(user.createdAt)}
             </p>
           </div>
@@ -163,7 +167,7 @@ export default function Page() {
             <label className="text-sm text-gray-500 mb-2 block">
               Last Updated
             </label>
-            <p className="text-lg font-medium text-gray-900">
+            <p className="text-base sm:text-lg font-medium text-gray-900">
               {formatDate(user.updatedAt)}
             </p>
           </div>
@@ -173,7 +177,7 @@ export default function Page() {
             <label className="text-sm text-gray-500 mb-2 block">
               Email Verification
             </label>
-            <p className="text-lg font-medium text-gray-900">
+            <p className="text-base sm:text-lg font-medium text-gray-900">
               {user.isEmailVerified ? "Verified" : "Not Verified"}
             </p>
           </div>
@@ -183,7 +187,7 @@ export default function Page() {
       {/* Change Password Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-r from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-2xl p-8 max-w-md w-full relative shadow-2xl">
+          <div className="bg-gradient-to-r from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-2xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl max-h-[90vh] overflow-y-auto">
             {/* Close Button */}
             <button
               onClick={() => {
@@ -193,7 +197,7 @@ export default function Page() {
                 setCurrentPassword("");
                 setNewPassword("");
               }}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X size={24} />
             </button>
@@ -203,10 +207,10 @@ export default function Page() {
               <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#A78BFA] to-[#5835C0] flex items-center justify-center mb-4">
                 <Lock className="text-white" size={24} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Change Password
               </h3>
-              <p className="text-gray-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-600 mt-2">
                 Enter your current password and choose a new one
               </p>
             </div>
@@ -222,7 +226,7 @@ export default function Page() {
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-4 text-black py-3 border border-[#E4DBFD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A78BFA] focus:border-transparent"
+                  className="w-full px-3 sm:px-4 text-black py-2.5 sm:py-3 border border-[#E4DBFD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A78BFA] focus:border-transparent text-sm sm:text-base"
                   placeholder="Enter current password"
                   required
                 />
@@ -237,7 +241,7 @@ export default function Page() {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-3 text-black border border-[#E4DBFD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A78BFA] focus:border-transparent"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-black border border-[#E4DBFD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A78BFA] focus:border-transparent text-sm sm:text-base"
                   placeholder="Enter new password"
                   required
                   minLength={6}
@@ -259,7 +263,7 @@ export default function Page() {
               )}
 
               {/* Buttons */}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -269,14 +273,14 @@ export default function Page() {
                     setCurrentPassword("");
                     setNewPassword("");
                   }}
-                  className="flex-1 px-4 py-3 bg-[#E4DBFD] rounded-lg font-medium text-[#8A5CF6] hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2.5 sm:py-3 bg-[#E4DBFD] rounded-lg font-medium text-[#8A5CF6] hover:bg-gray-50 transition-colors order-2 sm:order-1"
                   disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2.5 sm:py-3 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2"
                   disabled={loading}
                 >
                   {loading ? "Changing..." : "Change Password"}
