@@ -45,30 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       href: "/dashboard",
     },
     {
-      id: "content",
-      label: "Content",
-      icon: <Content isActive={pathname === "/dashboard/content"} />,
-      href: "/dashboard/content",
-    },
-    {
-      id: "keywords",
-      label: "Keywords",
-      icon: <Keywords isActive={pathname === "/dashboard/keywords"} />,
-      href: "/dashboard/keywords",
-    },
-    {
-      id: "history",
-      label: "History",
-      icon: <History isActive={pathname === "/dashboard/history"} />,
-      href: "/dashboard/history",
-    },
-    {
-      id: "setting",
-      label: "Setting",
-      icon: <Settings isActive={pathname === "/dashboard/settings"} />,
-      href: "/dashboard/settings",
-    },
-    {
       id: "users",
       label: "Users",
       icon: <Users isActive={pathname === "/dashboard/users"} />,
@@ -87,7 +63,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       icon: <Model isActive={pathname === "/dashboard/model"} />,
       href: "/dashboard/model",
     },
-
+    {
+      id: "prompt",
+      label: "Prompt",
+      icon: <Model isActive={pathname === "/dashboard/prompt"} />,
+      href: "/dashboard/prompt",
+    },
     {
       id: "profile",
       label: "Profile",
