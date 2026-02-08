@@ -10,16 +10,28 @@ export default function page() {
 
   console.log("-------profile------", user);
 
+  const formatDate = (dateString: string | undefined | null) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+  if (!user) {
+    return (
+      <div className="p-8 bg-gray-50 min-h-screen">
+        <div className="bg-white rounded-2xl p-8 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Profile</h1>
+          <p className="text-gray-600">No user data available. Please sign in again.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -29,8 +41,8 @@ export default function page() {
         <div className='flex items-center gap-6'>
           {/* Avatar Placeholder */}
           <div className='relative'>
-            <div className='w-32 h-32 rounded-full bg-gradient-to-br from-#A78BFA to-[#5835C0] flex items-center justify-center text-white text-4xl font-bold ring-4 ring-gray-100'>
-              {user.email.charAt(0).toUpperCase()}
+            <div className='w-32 h-32 rounded-full bg-gradient-to-br from-[#A78BFA] to-[#5835C0] flex items-center justify-center text-white text-4xl font-bold ring-4 ring-gray-100'>
+              {user.email?.charAt(0).toUpperCase()}
             </div>
             <button className='absolute bottom-1 right-1 bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors'>
               <Camera size={16} className='text-gray-600' />
