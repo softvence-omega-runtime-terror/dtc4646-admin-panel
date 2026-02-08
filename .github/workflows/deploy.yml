@@ -77,11 +77,13 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd dashboard
-            # Pull the latest images
-            docker compose pull
 
             # Stop and remove existing containers safely
             docker compose down --remove-orphans
+            
+            # Pull the latest images
+            docker compose pull
+
 
             # Start containers in detached mode
             docker compose up -d
