@@ -1,0 +1,15 @@
+services:
+  web:
+    image: imranwebstudio/dtc6464_web:latest
+    container_name: dtc6464_web
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}"
+    restart: always
+    networks:
+      - ai_default
+
+networks:
+  ai_default: 
+    external: true
