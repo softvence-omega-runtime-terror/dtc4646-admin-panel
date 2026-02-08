@@ -43,27 +43,16 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
   const getHeaderName = () => {
     switch (path) {
-      case "/dashboard/content":
-        return "Content";
-      case "/dashboard/analytics":
-        return "Analytics";
-      case "/dashboard/keywords":
-        return "Keyword Research with AI";
-      case "/dashboard/settings":
-        return "Settings";
       case "/dashboard/profile":
         return "Profile";
       case "/dashboard/form":
         return "Form";
       case "/dashboard/users":
         return "Users";
-      case "/dashboard/history/preview":
-        return (
-          <span className="flex items-center gap-2">
-            <span className="text-gray-400">History</span>{" "}
-            <ArrowRight size={22} /> Preview
-          </span>
-        );
+      case "/dashboard/model":
+        return "Model";
+      case "/dashboard/prompt":
+        return "Prompt";
       default:
         return "Overview";
     }
@@ -110,7 +99,7 @@ flex items-center justify-between border border-b-stone-300"
               />
             </div>
             <span className="text-[#7D68BC] text-xl md:text-[24px] font-normal">
-              {user?.username} arif 
+              {user?.username} Name
             </span>
             <svg
               className={`w-4 h-4 text-[#7D68BC] transition-transform ${
@@ -181,7 +170,7 @@ flex items-center justify-between border border-b-stone-300"
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-black font-bold text-base truncate">
-                      {user?.username}Arifur Rahman
+                      {user?.username}User Name
                     </h3>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="px-2 py-0.5 bg-[#5835C0] text-white text-xs font-medium rounded-full">
