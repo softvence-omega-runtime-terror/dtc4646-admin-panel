@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import Image from "next/image";
-import Logo from "../../../public/images/logo.png";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import toast from "react-hot-toast";
-import Cookies from "js-cookie";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
+import Logo from '../../../public/images/logo.png';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface FormData {
   email: string;
@@ -24,8 +24,8 @@ interface FormErrors {
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     rememberMe: false,
   });
 
@@ -43,15 +43,17 @@ const LoginPage: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = 'Email is required';
+    }
+
+    else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
 
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long";
+      newErrors.password = 'Password must be at least 6 characters long';
     }
 
     setErrors(newErrors);
@@ -62,7 +64,7 @@ const LoginPage: React.FC = () => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
 
     // Clear error when user starts typing
@@ -84,56 +86,54 @@ const LoginPage: React.FC = () => {
     const formatApiData = {
       email: formData.email,
       password: formData.password,
-    };
+    }
 
     // API call
     try {
       const api = `${process.env.NEXT_PUBLIC_API_URL_DEV}/auth/admin/login`;
-      const isHttps =
-        typeof window !== "undefined" && window.location.protocol === "https:";
       const { data } = await axios.post(api, formatApiData, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
       if (data?.success) {
         // Store token in cookies
-        Cookies.set("auth_token", data?.data?.accessToken, {
+        Cookies.set('auth_token', data?.data?.accessToken, {
           expires: 7,
-          secure: isHttps,
-          sameSite: "lax",
-        });
+          secure: true,
+          sameSite: 'strict',
+        })
 
-        Cookies.set("user", JSON.stringify(data?.data?.user), {
+        Cookies.set('user', JSON.stringify(data?.data?.user), {
           expires: 7,
-          secure: isHttps,
-          sameSite: "lax",
+          secure: true,
+          sameSite: 'strict',
         });
 
         // Redirect to dashboard
-        router.push("/dashboard");
-        toast.success(data?.message || "Login successful!");
+        router.push('/dashboard');
+        toast.success(data?.message || 'Login successful!');
       } else {
-        toast.error(data?.message || "Login failed. Please try again.");
+        toast.error(data?.message || 'Login failed. Please try again.');
       }
+
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message ||
-            "An error occurred. Please try again.",
-        );
+        toast.error(error.response?.data?.message || 'An error occurred. Please try again.');
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        toast.error('An unexpected error occurred. Please try again.');
       }
     } finally {
       setIsLoading(false);
     }
+
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
 
   return (
     <div
@@ -152,7 +152,8 @@ const LoginPage: React.FC = () => {
           <div className="flex items-center justify-center gap-3 mb-2">
             {/* <Image src={Logo} alt="Polymath" width={200} height={50} /> */}
 
-            <h1 className="text-[#7D68BC] text-4xl font-bold">InterviewFIo</h1>
+            <h1 className='text-[#7D68BC] text-4xl font-bold'>InterviewFIo</h1>
+
           </div>
         </div>
 
@@ -160,27 +161,17 @@ const LoginPage: React.FC = () => {
 
         <div className="relative">
           <div className="relative min-h-[500px]">
-            {isForgetPasswordLoading ? (
-              <LoadingSpinner
-                size="lg"
-                text="Please wait.... Sending verification code to your email."
-              />
-            ) : (
+            {isForgetPasswordLoading ? <LoadingSpinner size="lg" text="Please wait.... Sending verification code to your email." /> :
               <form
                 onSubmit={handleSubmit}
                 className="bg-white/4 rounded-xl p-8 shadow-2xl border-[1px] border-white/4 "
               >
-                <h2 className="text-[#111827] text-[24px] font-semibold text-center mb-6">
-                  Admin Login
-                </h2>
+                <h2 className="text-[#111827] text-[24px] font-semibold text-center mb-6">Admin Login</h2>
                 <div className="mb-5 bg-white/8  h-[2px]" />
                 <div className="space-y-6">
                   {/* Email Field */}
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-[#111827] text-[18px] font-normal mb-2"
-                    >
+                    <label htmlFor="email" className="block text-[#111827] text-[18px] font-normal mb-2">
                       Enter mail
                     </label>
                     <input
@@ -190,56 +181,37 @@ const LoginPage: React.FC = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="yourmail@mailhere"
-                      className={`w-full h-[56px] px-4 py-3 text-[#111827] rounded-lg border ${
-                        errors.email ? "border-red-500" : "border-[#E4DBFD]"
-                      } focus:outline-none focus:ring-2 focus:ring-[#E4DBFD] focus:border-transparent placeholder-[#967DE1]transition-colors`}
+                      className={`w-full h-[56px] px-4 py-3 text-[#111827] rounded-lg border ${errors.email ? 'border-red-500' : 'border-[#E4DBFD]'
+                        } focus:outline-none focus:ring-2 focus:ring-[#E4DBFD] focus:border-transparent placeholder-[#967DE1]transition-colors`}
                     />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.email}
-                      </p>
-                    )}
+                    {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                   </div>
 
                   {/* Password Field */}
                   <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-[#111827] text-[18px] font-normal mb-2"
-                    >
+                    <label htmlFor="password" className="block text-[#111827] text-[18px] font-normal mb-2">
                       Enter Password
                     </label>
                     <div className="relative">
                       <input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
                         name="password"
                         value={formData.password}
                         onChange={handleInputChange}
                         placeholder="••••••••••••••"
-                        className={`w-full h-[56px] px-4 py-3 pr-12 text-[#111827] rounded-lg border ${
-                          errors.password
-                            ? "border-red-500"
-                            : "border-[#E4DBFD]"
-                        } focus:outline-none focus:ring-2 focus:ring-[#E4DBFD] focus:border-transparent placeholder-[#967DE1] transition-colors`}
+                        className={`w-full h-[56px] px-4 py-3 pr-12 text-[#111827] rounded-lg border ${errors.password ? 'border-red-500' : 'border-[#E4DBFD]'
+                          } focus:outline-none focus:ring-2 focus:ring-[#E4DBFD] focus:border-transparent placeholder-[#967DE1] transition-colors`}
                       />
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#967DE1] hover:text-[#967DE1] transition-colors"
                       >
-                        {showPassword ? (
-                          <EyeOff size={20} />
-                        ) : (
-                          <Eye size={20} />
-                        )}
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
                     </div>
-                    {errors.password && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.password}
-                      </p>
-                    )}
+                    {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                   </div>
 
                   {/* Login Button */}
@@ -254,7 +226,7 @@ const LoginPage: React.FC = () => {
                         Logging in...
                       </div>
                     ) : (
-                      "Login"
+                      'Login'
                     )}
                   </button>
 
@@ -273,7 +245,7 @@ const LoginPage: React.FC = () => {
                   </div>
                 </div>
               </form>
-            )}
+            }
           </div>
         </div>
       </div>
