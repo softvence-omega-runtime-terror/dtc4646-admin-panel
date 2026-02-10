@@ -75,8 +75,6 @@ const ForgotPasswordPage1 = () => {
         setCountdown(60);
         setShowResend(false);
         setCode('');
-        console.log('Resend code clicked');
-        // Handle resend logic here
     };
 
     const handleBackToLogin = () => {

@@ -25,7 +25,6 @@ export default function Page() {
 
     try {
       const result = await updateAIConfig({ provider, model });
-      console.log("Config updated:", result);
       toast.success("AI Config updated successfully!");
     } catch (err: any) {
       console.error("Error:", err);
