@@ -74,7 +74,7 @@ const IssueModal: React.FC<ModalProps> = ({ isOpen, onClose, issueType, issueDat
       default:
         return null;
     }
-  };
+  }; 
 
   const content = getModalContent();
   if (!content) return null;
