@@ -61,7 +61,6 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({ metrics }) => {
         }
     ]
 
-    console.log('Formatted Metrics Data:', formatData);
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
             {formatData?.map((metric, index) => {
