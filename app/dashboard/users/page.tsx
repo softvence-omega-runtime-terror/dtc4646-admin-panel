@@ -2,17 +2,18 @@ import UsersTable from "@/components/UsersTable";
 import { getAdminUsers } from "@/lib/api/adminUsers";
 
 type Props = {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string;
     limit?: string;
     search?: string;
-  };
+  }>;
 };
 
 export default async function Page({ searchParams }: Props) {
-  const page = Number(searchParams?.page ?? "1");
-  const limit = Number(searchParams?.limit ?? "10");
-  const search = searchParams?.search ?? "";
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const page = Number(resolvedSearchParams.page ?? "1");
+  const limit = Number(resolvedSearchParams.limit ?? "10");
+  const search = resolvedSearchParams.search ?? "";
 
   const data = await getAdminUsers({
     page: Number.isFinite(page) && page > 0 ? page : 1,
