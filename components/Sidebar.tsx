@@ -98,15 +98,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Logo */}
         <div className="h-[110px] flex justify-center items-center mt-4">
           <Link href="/dashboard" className="flex flex-col items-center ">
-            {/* <Image
-              src="/images/logo.png"
-              alt="Polymath Logo"
-              width={188}
-              height={46}
-            /> */}
+
             <Image
               src="/images/logo-2.png"
-              alt="Polymath Logo"
+              alt="InterviewFIo Logo"
               width={80}
               height={46}
             />

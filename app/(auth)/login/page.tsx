@@ -150,7 +150,6 @@ const LoginPage: React.FC = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-2">
-            {/* <Image src={Logo} alt="Polymath" width={200} height={50} /> */}
 
             <h1 className='text-[#7D68BC] text-4xl font-bold'>InterviewFIo</h1>
 

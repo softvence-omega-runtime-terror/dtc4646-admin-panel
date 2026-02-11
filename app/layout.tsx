@@ -11,7 +11,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Polymath",
+  title: "InterviewFIo",
   description:
     "A powerful AI-driven tool for keyword research and content optimization.",
 };

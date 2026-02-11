@@ -96,7 +96,7 @@ const ForgotPasswordPage1 = () => {
                     <div className="flex items-center justify-center gap-3 mb-2">
                         <Image
                             src={Logo}
-                            alt='Polymath'
+                            alt='InterviewFIo'
                             width={258}
                             height={64}
                             priority
