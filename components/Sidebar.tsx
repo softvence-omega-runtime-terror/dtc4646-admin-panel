@@ -50,13 +50,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       icon: <Users isActive={pathname === "/dashboard/users"} />,
       href: "/dashboard/users",
     },
-
-    {
-      id: "form",
-      label: "Form",
-      icon: <Form isActive={pathname === "/dashboard/form"} />,
-      href: "/dashboard/form",
-    },
     {
       id: "model",
       label: "Model",

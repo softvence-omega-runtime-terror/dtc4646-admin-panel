@@ -2,13 +2,12 @@
 
 import { updateAIConfig } from "@/lib/api/aiConfig";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Page() {
   const [provider, setProvider] = useState("openai");
   const [model, setModel] = useState("gpt-4o-mini");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   // Model options based on provider
   const modelOptions = {
@@ -23,19 +22,13 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setSuccess("");
 
     try {
       const result = await updateAIConfig({ provider, model });
-      console.log("Config updated:", result);
-      setSuccess("AI Config updated successfully!");
-      
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(""), 3000);
+      toast.success("AI Config updated successfully!");
     } catch (err: any) {
       console.error("Error:", err);
-      setError(err.message || "Failed to update AI config");
+      toast.error(err.message || "Failed to update AI config");
     } finally {
       setLoading(false);
     }
@@ -90,20 +83,6 @@ export default function Page() {
                 )}
               </select>
             </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-700 text-sm">{error}</p>
-              </div>
-            )}
-
-            {/* Success Message */}
-            {success && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-green-700 text-sm">{success}</p>
-              </div>
-            )}
 
             {/* Submit Button */}
             <button

@@ -4,7 +4,7 @@ import { setAIConfigPreset } from "@/lib/api/aiConfigPresets";
 import { Plus, Edit, Trash2, FileText, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 
 type Props = {
   presets: any;
@@ -41,11 +41,11 @@ const presetsArray = useMemo(() => {
 
       toast.success(result?.message || `Prompt "${selectedPrompt}" activated successfully!`);
 
-      // ✅ same UX you had (close modal + reset)
+      
       setIsModalOpen(false);
       setSelectedPrompt("");
 
-      // ✅ refresh server data (also triggers root loading.tsx if needed)
+      
       router.refresh();
     } catch (err: any) {
       toast.error(err?.message || "Failed to set prompt");
@@ -103,14 +103,6 @@ const presetsArray = useMemo(() => {
                 <h3 className="text-xl font-bold text-white">
                   {preset.name}
                 </h3>
-                <div className="flex items-center gap-2">
-                  <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
-                    <Edit className="text-white" size={18} />
-                  </button>
-                  <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-red-500/50 transition-colors">
-                    <Trash2 className="text-white" size={18} />
-                  </button>
-                </div>
               </div>
             </div>
 
@@ -153,7 +145,6 @@ const presetsArray = useMemo(() => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-gradient-to-r from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-2xl p-8 max-w-md w-full relative shadow-2xl">
-            {/* Close Button */}
             <button
               onClick={() => {
                 setIsModalOpen(false);

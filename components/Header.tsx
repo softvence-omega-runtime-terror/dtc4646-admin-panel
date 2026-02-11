@@ -45,8 +45,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     switch (path) {
       case "/dashboard/profile":
         return "Profile";
-      case "/dashboard/form":
-        return "Form";
       case "/dashboard/users":
         return "Users";
       case "/dashboard/model":
@@ -99,7 +97,7 @@ flex items-center justify-between border border-b-stone-300"
               />
             </div>
             <span className="text-[#7D68BC] text-xl md:text-[24px] font-normal">
-              {user?.username} Name
+              Admin
             </span>
             <svg
               className={`w-4 h-4 text-[#7D68BC] transition-transform ${
@@ -169,13 +167,10 @@ flex items-center justify-between border border-b-stone-300"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-black font-bold text-base truncate">
-                      {user?.username}User Name
-                    </h3>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="px-2 py-0.5 bg-[#5835C0] text-white text-xs font-medium rounded-full">
-                        {user?.role}
-                      </span>
+                      <h3 className="text-black font-bold text-xl truncate">
+                        Admin
+                      </h3>
                       <span
                         className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                           user?.status === "active"

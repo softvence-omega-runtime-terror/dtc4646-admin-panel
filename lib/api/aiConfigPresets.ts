@@ -28,7 +28,7 @@ type SetPresetResponse = {
   };
 };
 
-// GET AI Config Presets
+
 export async function getAIConfigPresets(): Promise<any> {
   const cookieStore = await cookies();
   
@@ -49,7 +49,6 @@ export async function getAIConfigPresets(): Promise<any> {
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.log("-------error response--------", res.status, errorText);
     throw new Error(`Failed to fetch AI config presets: ${res.statusText}`);
   }
 
@@ -64,8 +63,6 @@ export async function setAIConfigPreset(payload: SetPresetPayload): Promise<any>
   
   const authToken = cookieStore.get("auth_token")?.value;
   
-  console.log("-------auth token--------", authToken);
-  console.log("-------set preset payload--------", payload);
 
   if (!authToken) {
     throw new Error("No authentication token found");
@@ -81,16 +78,13 @@ export async function setAIConfigPreset(payload: SetPresetPayload): Promise<any>
     cache: "no-store",
   });
 
-  console.log("-------response status--------", res.status);
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.log("-------error response--------", res.status, errorText);
     throw new Error(`Failed to set AI config preset: ${res.statusText}`);
   }
 
   const response: SetPresetResponse = await res.json();
-  console.log("-------set preset response--------", JSON.stringify(response, null, 2));
   
   return response.data;
 }

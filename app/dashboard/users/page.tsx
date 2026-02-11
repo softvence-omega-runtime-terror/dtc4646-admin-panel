@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: Props) {
   });
 
   return (
-    <div className="p-8">
+    <div className="w-full min-w-0 p-6 lg:p-8">
       <UsersTable data={data} />
     </div>
   );
