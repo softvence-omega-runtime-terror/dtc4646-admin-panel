@@ -1,13 +1,8 @@
-import { getProviders } from '@/lib/api/provider'
-import React from 'react'
+import ProvidersClient from "@/components/providers/ProvidersClient";
+import { getProviders } from "@/lib/api/provider";
 
-export default function page() {
-    const providers = getProviders()
-    console.log("----providers-----", providers)
-    
-  return (
-    <div className='text-black p-8'>
-      provider
-    </div>
-  )
+export default async function Page() {
+  const providers = await getProviders();
+
+  return <ProvidersClient providers={providers ?? []} />;
 }

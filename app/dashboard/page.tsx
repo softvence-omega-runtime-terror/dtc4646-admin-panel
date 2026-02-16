@@ -1,13 +1,33 @@
+// app/dashboard/page.tsx
 import { getAdminUsersCount } from "@/lib/api/adminUsers";
 import { getAIConfig } from "@/lib/api/aiConfig";
 import { Bot, Cpu, FileText, Sparkles } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
-  const config = await getAIConfig();
-  const total = await getAdminUsersCount();
+  const configResult = await getAIConfig();
+  
+  // Handle auth failure - redirect to login
+  if (!configResult.success && configResult.requiresLogin) {
+    redirect("/login");
+  }
 
-  const aiConfig = config.data;
-  console.log(aiConfig)
+  // Handle other errors
+  if (!configResult.success) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <h2 className="text-xl text-red-500 mb-4">Failed to load configuration</h2>
+          <p className="text-gray-600">{configResult.error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  
+  const total = await getAdminUsersCount();
+  const aiConfig = configResult?.data?.data;
+  console.log("----------config result---------", aiConfig)
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">

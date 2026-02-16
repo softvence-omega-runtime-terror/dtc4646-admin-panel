@@ -1,17 +1,14 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL_DEV;
 
 if (!BASE_URL) throw new Error("NEXT_PUBLIC_API_URL_DEV is not defined");
 
-type AIConfigResponse = {
-  success: boolean;
-  message: string;
-  data: any; 
-};
+type APIResult<T> = 
+  | { success: true; data: T }
+  | { success: false; error: string; requiresLogin?: boolean };
 
 // Helper function to refresh token
 async function refreshToken(): Promise<string | null> {
@@ -36,13 +33,13 @@ async function refreshToken(): Promise<string | null> {
     }
 
     const data = await res.json();
-    
+
     // Update cookies with new tokens
     cookieStore.set("auth_token", data.data.accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 60 * 15, // 15 minutes
+      maxAge: 60 * 15,
     });
 
     if (data.data.refreshToken) {
@@ -50,7 +47,7 @@ async function refreshToken(): Promise<string | null> {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
       });
     }
 
@@ -60,21 +57,18 @@ async function refreshToken(): Promise<string | null> {
   }
 }
 
-// Separate server action to clear auth cookies
-export async function clearAuthCookies() {
-  const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
-  cookieStore.delete("refresh_token");
-  cookieStore.delete("user");
-}
-
 // Helper function for authenticated fetch with auto-refresh
-async function authenticatedFetch(url: string, options: RequestInit = {}) {
+async function authenticatedFetch(url: string, options: RequestInit = {}): Promise<APIResult<any>> {
   const cookieStore = await cookies();
   let authToken = cookieStore.get("auth_token")?.value;
 
+  // If no token, try to refresh immediately
   if (!authToken) {
-    redirect("/login");
+    const newToken = await refreshToken();
+    if (!newToken) {
+      return { success: false, error: "Authentication required", requiresLogin: true };
+    }
+    authToken = newToken;
   }
 
   // First attempt
@@ -82,18 +76,16 @@ async function authenticatedFetch(url: string, options: RequestInit = {}) {
     ...options,
     headers: {
       ...options.headers,
-      "Authorization": `Bearer ${authToken}`,
+      Authorization: `Bearer ${authToken}`,
     },
   });
 
-  // If 401, try to refresh and retry
+  // If 401, try to refresh and retry ONCE
   if (res.status === 401) {
     const newToken = await refreshToken();
-    
+
     if (!newToken) {
-      // DON'T delete cookies here - just redirect
-      // Cookies will be cleared on login page
-      redirect("/login");
+      return { success: false, error: "Session expired", requiresLogin: true };
     }
 
     // Retry with new token
@@ -101,17 +93,22 @@ async function authenticatedFetch(url: string, options: RequestInit = {}) {
       ...options,
       headers: {
         ...options.headers,
-        "Authorization": `Bearer ${newToken}`,
+        Authorization: `Bearer ${newToken}`,
       },
     });
   }
 
-  return res;
+  if (!res.ok) {
+    return { success: false, error: `Request failed: ${res.statusText}` };
+  }
+
+  const data = await res.json();
+  return { success: true, data };
 }
 
-// GET AI Config
-export async function getAIConfig(): Promise<any> {
-  const res = await authenticatedFetch(`${BASE_URL}/admin/config`, {
+// GET AI Config - Returns result instead of throwing
+export async function getAIConfig(): Promise<APIResult<any>> {
+  const result = await authenticatedFetch(`${BASE_URL}/admin/config`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -119,17 +116,16 @@ export async function getAIConfig(): Promise<any> {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch AI config: ${res.statusText}`);
+  if (!result.success) {
+    return result;
   }
 
-  const response: AIConfigResponse = await res.json();
-  return response.data;
+  return { success: true, data: result.data.data };
 }
 
 // POST/UPDATE AI Config
-export async function updateAIConfig(payload: any): Promise<any> {
-  const res = await authenticatedFetch(`${BASE_URL}/admin/ai-config`, {
+export async function updateAIConfig(payload: any): Promise<APIResult<any>> {
+  const result = await authenticatedFetch(`${BASE_URL}/admin/ai-config`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -138,14 +134,12 @@ export async function updateAIConfig(payload: any): Promise<any> {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    throw new Error(`Failed to update AI config: ${res.statusText}`);
+  if (!result.success) {
+    return result;
   }
 
-  const response: AIConfigResponse = await res.json();
-  return response.data;
+  return { success: true, data: result.data.data };
 }
-
 // export async function getAIConfig(): Promise<any> {
 //   const cookieStore = await cookies();
   
