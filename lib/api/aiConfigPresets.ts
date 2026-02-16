@@ -239,7 +239,6 @@
       throw new Error("No authentication token found");
     }
 
-    console.log("----payload----",payload)
 
     const res = await fetch(`${BASE_URL}/admin/config`, {
       method: "PUT",
@@ -265,7 +264,6 @@
     }
 
     if (!res.ok) {
-      console.log("--",res)
       throw new Error(
         `Failed to update global AI config: ${res.status} ${res.statusText} - ${text}`
       );

@@ -30,7 +30,6 @@ export async function getProviders(): Promise<any> {
   }
 
   const response = await res.json();
-  console.log("----------", response.data.data);
 
   return response?.data?.data;
 }
@@ -69,11 +68,11 @@ export async function createProvider(payload: CreateProviderPayload) {
   }
 
   if (!res.ok) {
-    console.error("❌ createProvider backend error:", {
-      status: res.status,
-      statusText: res.statusText,
-      response: data,
-    });
+    // console.error("❌ createProvider backend error:", {
+    //   status: res.status,
+    //   statusText: res.statusText,
+    //   response: data,
+    // });
     throw new Error(
       `Failed to create provider: ${res.status} ${res.statusText} - ${text}`,
     );

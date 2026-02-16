@@ -27,7 +27,6 @@ export default async function Page() {
   
   const total = await getAdminUsersCount();
   const aiConfig = configResult?.data?.data;
-  console.log("----------config result---------", aiConfig)
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">

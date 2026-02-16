@@ -5,7 +5,6 @@ import { getAIConfigPresets } from "@/lib/api/aiConfigPresets";
 export default async function Page() {
   const prompts = await getAIConfigPresets();
 
-  console.log()
 
   return <PromptPage presets={prompts} />;
 }

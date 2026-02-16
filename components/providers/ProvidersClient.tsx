@@ -47,7 +47,6 @@ async function onSave(e: React.FormEvent) {
   e.preventDefault();
 
   if (!providerName.trim() || !apiKey.trim()) {
-    console.error("Provider name and API key are required");
     return;
   }
 
@@ -60,7 +59,6 @@ async function onSave(e: React.FormEvent) {
     closeModal();
     router.refresh();
   } catch (err) {
-    console.error(err);
   }
 }
 
