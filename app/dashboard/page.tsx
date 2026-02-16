@@ -7,6 +7,7 @@ export default async function Page() {
   const total = await getAdminUsersCount();
 
   const aiConfig = config.data;
+  console.log(aiConfig)
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -33,7 +34,7 @@ export default async function Page() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">AI Provider</p>
+              <p className="text-sm text-gray-600 mb-1">Current Provider</p>
               <h3 className="text-2xl font-bold text-gray-900 capitalize">
                 {aiConfig?.ai_provider || "N/A"}
               </h3>
@@ -47,7 +48,7 @@ export default async function Page() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Active Model</p>
+              <p className="text-sm text-gray-600 mb-1">Current Model</p>
               <h3 className="text-lg font-bold text-gray-900">
                 {aiConfig?.ai_model || "N/A"}
               </h3>
@@ -61,7 +62,7 @@ export default async function Page() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Prompt Type</p>
+              <p className="text-sm text-gray-600 mb-1">Current Prompt</p>
               <h3 className="text-lg font-bold text-gray-900">
                 {aiConfig?.system_prompt_name || "N/A"}
               </h3>
