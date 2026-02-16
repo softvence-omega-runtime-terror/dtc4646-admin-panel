@@ -51,6 +51,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       href: "/dashboard/users",
     },
     {
+      id: "provider",
+      label: "Provider",
+      icon: <Users isActive={pathname === "/dashboard/provider"} />,
+      href: "/dashboard/provider",
+    },
+    {
       id: "model",
       label: "Model",
       icon: <Model isActive={pathname === "/dashboard/model"} />,
@@ -98,7 +104,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Logo */}
         <div className="h-[110px] flex justify-center items-center mt-4">
           <Link href="/dashboard" className="flex flex-col items-center ">
-
             <Image
               src="/images/logo-2.png"
               alt="InterviewFIo Logo"
