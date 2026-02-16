@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Logo from "../../../public/images/logo.png";
@@ -23,6 +23,11 @@ interface FormErrors {
 }
 
 const LoginPage: React.FC = () => {
+    useEffect(() => {
+    Cookies.remove('auth_token');
+    Cookies.remove('refresh_token');
+    Cookies.remove('user');
+  }, []);
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     email: "",

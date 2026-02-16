@@ -13,12 +13,7 @@ type AIConfigResponse = {
   data: any; 
 };
 
-type UpdateAIConfigPayload = {
-  provider: string;
-  model: string;
-};
-
-
+// Helper function to refresh token
 async function refreshToken(): Promise<string | null> {
   try {
     const cookieStore = await cookies();
@@ -65,6 +60,15 @@ async function refreshToken(): Promise<string | null> {
   }
 }
 
+// Separate server action to clear auth cookies
+export async function clearAuthCookies() {
+  const cookieStore = await cookies();
+  cookieStore.delete("auth_token");
+  cookieStore.delete("refresh_token");
+  cookieStore.delete("user");
+}
+
+// Helper function for authenticated fetch with auto-refresh
 async function authenticatedFetch(url: string, options: RequestInit = {}) {
   const cookieStore = await cookies();
   let authToken = cookieStore.get("auth_token")?.value;
@@ -87,10 +91,8 @@ async function authenticatedFetch(url: string, options: RequestInit = {}) {
     const newToken = await refreshToken();
     
     if (!newToken) {
-      // Refresh failed, clear cookies and redirect
-      cookieStore.delete("auth_token");
-      cookieStore.delete("refresh_token");
-      cookieStore.delete("user");
+      // DON'T delete cookies here - just redirect
+      // Cookies will be cleared on login page
       redirect("/login");
     }
 
@@ -107,6 +109,7 @@ async function authenticatedFetch(url: string, options: RequestInit = {}) {
   return res;
 }
 
+// GET AI Config
 export async function getAIConfig(): Promise<any> {
   const res = await authenticatedFetch(`${BASE_URL}/admin/config`, {
     method: "GET",
@@ -124,6 +127,7 @@ export async function getAIConfig(): Promise<any> {
   return response.data;
 }
 
+// POST/UPDATE AI Config
 export async function updateAIConfig(payload: any): Promise<any> {
   const res = await authenticatedFetch(`${BASE_URL}/admin/ai-config`, {
     method: "POST",
@@ -141,7 +145,6 @@ export async function updateAIConfig(payload: any): Promise<any> {
   const response: AIConfigResponse = await res.json();
   return response.data;
 }
-
 
 // export async function getAIConfig(): Promise<any> {
 //   const cookieStore = await cookies();
