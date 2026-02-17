@@ -11,6 +11,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
   const route = useRouter();
   const path = usePathname();
 
@@ -40,6 +42,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isProfileOpen]);
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   const getHeaderName = () => {
     switch (path) {
@@ -75,7 +81,7 @@ flex items-center justify-between border border-b-stone-300"
       <div className="absolute bottom-0 left-4 md:left-8 right-4 md:right-12 h-[2px] bg-white/24" />
 
       <div className="flex items-center space-x-3 z-10">
-        <button onClick={onMenuClick} className="md:hidden text-white">
+        <button onClick={onMenuClick} className="md:hidden text-[#7D68BC]">
           <Menu size={28} />
         </button>
         <h1 className="text-xl md:text-[32px] font-semibold text-[#7D68BC]">
@@ -115,45 +121,6 @@ flex items-center justify-between border border-b-stone-300"
               />
             </svg>
           </button>
-
-          {/* {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-gradient-to-b from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-xl shadow-xl border border-[#A78BFA] z-50">
-              <div className="px-5 py-5 flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#5835C0] shadow-md">
-                  <Image
-                    src="/images/user-avatar.png"
-                    alt="User Avatar"
-                    width={64}
-                    height={64}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div className="mt-4 w-full text-left space-y-2">
-                  <div>
-                    <p className="text-[#7D68BC] font-medium text-sm">Name</p>
-                    <p className="text-black font-semibold text-sm">
-                      {user?.role}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[#7D68BC] font-medium text-sm">Email</p>
-                    <p className="text-black break-all text-sm">
-                      {user?.email}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="px-5 pb-4">
-                <button
-                  className="w-full bg-gradient-to-r from-[#A78BFA] to-[#5835C0] text-white font-medium py-2 px-4 rounded-md transition-colors"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          )} */}
 
           {isProfileOpen && (
             <div className="absolute right-0 mt-2 w-80 bg-gradient-to-b from-[#F5F3FF] via-[#EFF6FF] to-[#F0FDFA] rounded-xl shadow-xl border border-[#A78BFA] z-50">

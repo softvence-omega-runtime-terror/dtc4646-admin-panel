@@ -13,6 +13,8 @@ import Profile from "./icons/Profile";
 import Model from "./icons/Model";
 import Form from "./icons/Form";
 import Users from "./icons/Users";
+import Provider from "./icons/Provider";
+import Prompt from "./icons/Prompt";
 
 interface NavItem {
   id: string;
@@ -53,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       id: "provider",
       label: "Provider",
-      icon: <Users isActive={pathname === "/dashboard/provider"} />,
+      icon: <Provider isActive={pathname === "/dashboard/provider"} />,
       href: "/dashboard/provider",
     },
     {
@@ -65,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       id: "prompt",
       label: "Prompt",
-      icon: <Model isActive={pathname === "/dashboard/prompt"} />,
+      icon: <Prompt isActive={pathname === "/dashboard/prompt"} />,
       href: "/dashboard/prompt",
     },
     {
@@ -129,6 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <li key={item.id}>
                 <Link
                   href={item.href}
+                  onClick={onClose}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200
                     ${
                       isActive(item.href)

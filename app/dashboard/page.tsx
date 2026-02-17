@@ -6,13 +6,12 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const configResult = await getAIConfig();
+  console.log("configResult", configResult)
   
-  // Handle auth failure - redirect to login
   if (!configResult.success && configResult.requiresLogin) {
     redirect("/login");
   }
 
-  // Handle other errors
   if (!configResult.success) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -24,7 +23,6 @@ export default async function Page() {
     );
   }
 
-  
   const total = await getAdminUsersCount();
   const aiConfig = configResult?.data?.data;
 
