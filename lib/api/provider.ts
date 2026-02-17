@@ -43,23 +43,24 @@ type CreateProviderPayload = {
 export async function createProvider(payload: CreateProviderPayload) {
   const cookieStore = await cookies();
   const authToken = cookieStore.get("auth_token")?.value;
-  if (!authToken) throw new Error("No authentication token found");
 
-  const fd = new FormData();
-  fd.set("name", payload.name.trim().toLowerCase());
-  fd.set("apiKey", payload.apiKey.trim());
+  if (!authToken) throw new Error("No authentication token found");
 
   const res = await fetch(`${BASE_URL}/admin/providers`, {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
-      // ✅ DO NOT set Content-Type when using FormData
     },
-    body: fd,
+    body: JSON.stringify({
+      name: payload.name.trim().toLowerCase(),
+      apiKey: payload.apiKey.trim(),
+    }),
     cache: "no-store",
   });
 
-  const text = await res.text(); // read raw response
+  const text = await res.text();
+
   let data: any;
   try {
     data = text ? JSON.parse(text) : null;
@@ -68,13 +69,8 @@ export async function createProvider(payload: CreateProviderPayload) {
   }
 
   if (!res.ok) {
-    // console.error("❌ createProvider backend error:", {
-    //   status: res.status,
-    //   statusText: res.statusText,
-    //   response: data,
-    // });
     throw new Error(
-      `Failed to create provider: ${res.status} ${res.statusText} - ${text}`,
+      `Failed to create provider: ${res.status} ${res.statusText} - ${text}`
     );
   }
 
@@ -114,4 +110,34 @@ export async function getProviderModels(providerId: string): Promise<string[]> {
 
   const json: ModelsResponse = JSON.parse(text);
   return json?.data?.data?.models ?? [];
+}
+
+export async function deleteProvider(id: string): Promise<any> {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("auth_token")?.value;
+
+  if (!authToken) throw new Error("No authentication token found");
+  if (!id) throw new Error("Provider id is required");
+
+  const res = await fetch(`${BASE_URL}/admin/providers/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    cache: "no-store",
+  });
+
+  const text = await res.text();
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to delete provider: ${res.status} ${res.statusText} - ${text}`
+    );
+  }
+
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    return text;
+  }
 }

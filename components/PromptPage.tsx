@@ -61,6 +61,10 @@ export default function PromptPage({ presets }: Props) {
   const [editOpen, setEditOpen] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState<Preset | null>(null);
 
+  // ====== delete modal ====
+  const [deleteTarget, setDeleteTarget] = useState<Preset | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const [editName, setEditName] = useState("");
   const [editContent, setEditContent] = useState("");
   const [editActivate, setEditActivate] = useState(false);
@@ -185,88 +189,49 @@ export default function PromptPage({ presets }: Props) {
     }
   }
 
-  async function handleActivatePrompt() {
-    if (!selectedPromptId) return toast.error("Please select a prompt");
-
-    const target = prompts.find((p) => p.id === selectedPromptId);
-    if (!target) return toast.error("Selected prompt not found");
-
-    setActivating(true);
-    try {
-      // ✅ your backend expects prompt_name
-      await setAIConfigPreset({ prompt_name: target.name });
-
-      // instant UI update
-      setPrompts((prev) =>
-        prev.map((p) => ({ ...p, is_active: p.id === target.id })),
-      );
-
-      toast.success(`"${target.name}" activated`);
-      closeActivate();
-
-      router.refresh();
-    } catch (err: any) {
-      toast.error(err?.message || "Failed to activate prompt");
-    } finally {
-      setActivating(false);
-    }
-  }
-
   function canDelete(p: Preset) {
     // based on your rules
     return !p.is_active && !p.is_default;
   }
 
-  async function handleDeletePrompt(id: string) {
-    const p = prompts.find((x) => x.id === id);
-    if (!p) return;
+  async function handleDeletePromptConfirmed() {
+    if (!deleteTarget) return;
 
-    if (p.is_active) return toast.error("You cannot delete the active prompt");
-    if (p.is_default) return toast.error("You cannot delete a default prompt");
+    const prompt = deleteTarget;
+    setDeletingId(prompt.id);
 
-    const ok = confirm(`Delete "${p.name}"?`);
-    if (!ok) return;
+    // optimistic UI removal
+    setPrompts((prev) => prev.filter((p) => p.id !== prompt.id));
 
     try {
-      // ✅ instant UI update
-      setPrompts((prev) => prev.filter((x) => x.id !== id));
-
-      // ✅ server call
-      await deletePrompt(id);
-
+      await deletePrompt(prompt.id);
       toast.success("Prompt deleted");
+      setDeleteTarget(null);
       router.refresh();
     } catch (err: any) {
-      // rollback if delete fails
-      setPrompts((prev) =>
-        prev.some((x) => x.id === p.id) ? prev : [p, ...prev],
-      );
+      // rollback if failed
+      setPrompts((prev) => [prompt, ...prev]);
       toast.error(err?.message || "Failed to delete prompt");
+    } finally {
+      setDeletingId(null);
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0B1220] p-6 md:p-10">
-      <div className="mx-auto max-w-5xl">
+    <div className="min-h-screen  p-6 md:p-10">
+      <div className="">
         {/* Header */}
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-white">
+        <div className="mb-6 flex flex-col sm:flex-row items-start justify-between gap-4">
+          <div className="">
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
               System Prompts
             </h1>
-            <p className="mt-1 text-sm text-white/60">
+            <p className="mt-1 text-sm text-gray-500">
               Persona library for AI interviews
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setActivateOpen(true)}
-              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10"
-            >
-              Activate Prompt
-            </button>
-
             <button
               onClick={() => setCreateOpen(true)}
               className="rounded-lg bg-[#5B5FEA] px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90"
@@ -277,63 +242,68 @@ export default function PromptPage({ presets }: Props) {
         </div>
 
         {/* Table */}
-        <div className="rounded-xl border border-white/10 bg-white/5 shadow-sm backdrop-blur">
-          <div className="grid grid-cols-12 gap-3 border-b border-white/10 px-5 py-3 text-xs font-medium text-white/60">
-            <div className="col-span-6">Prompt Name</div>
-            <div className="col-span-3">Status</div>
-            <div className="col-span-3 text-right">Actions</div>
-          </div>
-
-          <div className="divide-y divide-white/10">
-            {prompts.map((p) => (
-              <div
-                key={p.id}
-                className="grid grid-cols-12 items-center gap-3 px-5 py-4 hover:bg-white/[0.04] transition"
-              >
-                <div className="col-span-6">
-                  <p className="text-sm font-semibold text-white">{p.name}</p>
-                </div>
-
-                <div className="col-span-3">
-                  {p.is_active ? (
-                    <span className="inline-flex items-center rounded-full bg-[#3B82F6]/15 px-3 py-1 text-xs font-semibold text-[#93C5FD]">
-                      Active
-                    </span>
-                  ) : (
-                    <span className="text-sm text-white/50">-</span>
-                  )}
-                </div>
-
-                <div className="col-span-3 flex justify-end gap-2">
-                  <button
-                    onClick={() => openEditModal(p)}
-                    className="rounded-lg bg-white/5 p-2 text-white/70 hover:bg-white/10"
-                  >
-                    <Edit size={16} />
-                  </button>
-
-                  <button
-                    onClick={() => handleDeletePrompt(p.id)}
-                    disabled={!canDelete(p)}
-                    className="rounded-lg bg-[#EF4444]/15 px-4 py-2 text-xs font-semibold text-[#FCA5A5]"
-                  >
-                    Delete
-                  </button>
-                </div>
+        <div className="overflow-x-auto">
+          <div className="rounded-xl border border-gray-200 bg-white shadow-sm w-fit sm:w-full">
+            <div className="min-w-[480px]">
+              <div className="grid grid-cols-12 gap-3 border-b border-gray-200 px-5 py-3 text-xs font-medium text-gray-500">
+                <div className="col-span-6">Prompt Name</div>
+                <div className="col-span-3">Status</div>
+                <div className="col-span-3 text-right">Actions</div>
               </div>
-            ))}
 
-            {prompts.length === 0 && (
-              <div className="px-5 py-10 text-center text-sm text-white/60">
-                No prompts found.
+              <div className="divide-y divide-gray-100">
+                {prompts.map((p) => (
+                  <div
+                    key={p.id}
+                    className="min-w-[480px] grid grid-cols-12 items-center gap-3 px-5 py-4 hover:bg-gray-50 transition"
+                  >
+                    <div className="col-span-6">
+                      <p className="text-sm font-semibold text-gray-900">
+                        {p.name}
+                      </p>
+                    </div>
+
+                    <div className="col-span-3">
+                      {p.is_active ? (
+                        <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="text-sm text-gray-400">-</span>
+                      )}
+                    </div>
+
+                    <div className="col-span-3 flex justify-end gap-2">
+                      <button
+                        onClick={() => openEditModal(p)}
+                        className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                      >
+                        <Edit size={16} />
+                      </button>
+
+                      <button
+                        onClick={() => setDeleteTarget(p)}
+                        disabled={!canDelete(p)}
+                        className="rounded-lg bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 disabled:opacity-40"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                {prompts.length === 0 && (
+                  <div className="px-5 py-10 text-center text-sm text-gray-500">
+                    No prompts found.
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
-
-        <div className="mt-4 text-xs text-white/50">
+        <div className="mt-4 text-xs text-gray-500">
           Active prompt:{" "}
-          <span className="text-white/70">{activePrompt?.name ?? "None"}</span>
+          <span className="text-gray-900">{activePrompt?.name ?? "None"}</span>
         </div>
       </div>
 
@@ -342,51 +312,56 @@ export default function PromptPage({ presets }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50" onClick={closeCreate} />
 
-          <div className="relative w-full max-w-xl rounded-2xl bg-[#1F2A3A] p-6 shadow-2xl ring-1 ring-white/10">
+          <div className="relative w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl border border-gray-200">
             <button
               onClick={closeCreate}
-              className="absolute right-4 top-4 text-white/60 hover:text-white"
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
             >
               <X size={20} />
             </button>
 
-            <h2 className="text-xl font-semibold text-white">Create Prompt</h2>
-            <p className="mt-1 text-sm text-white/60">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Create Prompt
+            </h2>
+
+            <p className="mt-1 text-sm text-gray-500">
               Create a new system prompt preset.
             </p>
 
             <form onSubmit={handleCreatePrompt} className="mt-6 space-y-5">
               <div>
-                <label className="mb-2 block text-sm text-white/70">
+                <label className="mb-2 block text-sm text-gray-600">
                   Prompt Name
                 </label>
+
                 <input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="career-coach-preset"
-                  className="h-11 w-full rounded-xl border border-white/10 bg-[#273449] px-4 text-sm text-white placeholder:text-white/35 outline-none focus:ring-2 focus:ring-[#5B5FEA]/60"
+                  className="h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm text-white/70">
+                <label className="mb-2 block text-sm text-gray-600">
                   Content
                 </label>
+
                 <textarea
                   value={newContent}
                   onChange={(e) => setNewContent(e.target.value)}
                   placeholder="Your preset content here..."
                   rows={6}
-                  className="w-full rounded-xl border border-white/10 bg-[#273449] px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none focus:ring-2 focus:ring-[#5B5FEA]/60"
+                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
                 />
               </div>
 
-              <label className="flex items-center gap-3 text-sm text-white/70">
+              <label className="flex items-center gap-3 text-sm text-gray-600">
                 <input
                   type="checkbox"
                   checked={newActivate}
                   onChange={(e) => setNewActivate(e.target.checked)}
-                  className="h-4 w-4 rounded border-white/20 bg-transparent"
+                  className="h-4 w-4 rounded border-gray-300"
                 />
                 Activate immediately
               </label>
@@ -395,11 +370,12 @@ export default function PromptPage({ presets }: Props) {
                 <button
                   type="button"
                   onClick={closeCreate}
-                  className="h-10 rounded-xl border border-white/10 bg-transparent px-5 text-sm font-medium text-white/80 hover:bg-white/5"
+                  className="h-10 rounded-xl border border-gray-300 bg-white px-5 text-sm font-medium text-gray-600 hover:bg-gray-50"
                   disabled={saving}
                 >
                   Cancel
                 </button>
+
                 <button
                   type="submit"
                   className="h-10 rounded-xl bg-[#5B5FEA] px-5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
@@ -413,125 +389,54 @@ export default function PromptPage({ presets }: Props) {
         </div>
       )}
 
-      {/* Activate Modal */}
-      {activateOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={closeActivate}
-          />
-
-          <div className="relative w-full max-w-lg rounded-2xl bg-[#1F2A3A] p-6 shadow-2xl ring-1 ring-white/10">
-            <button
-              onClick={closeActivate}
-              className="absolute right-4 top-4 text-white/60 hover:text-white"
-            >
-              <X size={20} />
-            </button>
-
-            <h2 className="text-xl font-semibold text-white">
-              Activate Prompt
-            </h2>
-            <p className="mt-1 text-sm text-white/60">
-              Select a prompt to set as active.
-            </p>
-
-            <div className="mt-6 space-y-5">
-              <div>
-                <label className="mb-2 block text-sm text-white/70">
-                  Prompt
-                </label>
-                <select
-                  value={selectedPromptId}
-                  onChange={(e) => setSelectedPromptId(e.target.value)}
-                  className="h-11 w-full rounded-xl border border-white/10 bg-[#273449] px-4 text-sm text-white outline-none focus:ring-2 focus:ring-[#5B5FEA]/60"
-                >
-                  <option value="">Choose a prompt...</option>
-                  {prompts.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {selectedPromptId && (
-                <div>
-                  <label className="mb-2 block text-sm text-white/70">
-                    Preview
-                  </label>
-                  <div className="rounded-xl border border-white/10 bg-[#273449] p-4 text-sm text-white/80">
-                    {prompts.find((p) => p.id === selectedPromptId)?.content}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={closeActivate}
-                  className="h-10 rounded-xl border border-white/10 bg-transparent px-5 text-sm font-medium text-white/80 hover:bg-white/5"
-                  disabled={activating}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleActivatePrompt}
-                  className="h-10 rounded-xl bg-[#5B5FEA] px-5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
-                  disabled={activating || !selectedPromptId}
-                >
-                  {activating ? "Activating..." : "Activate"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Edit Modal  */}
       {editOpen && editingPrompt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Overlay stays dark */}
           <div
             className="absolute inset-0 bg-black/50"
             onClick={closeEditModal}
           />
 
-          <div className="relative w-full max-w-xl rounded-2xl bg-[#1F2A3A] p-6 shadow-2xl">
+          {/* ✅ Modal Card → White */}
+          <div className="relative w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl border border-gray-200">
             <button
               onClick={closeEditModal}
-              className="absolute right-4 top-4 text-white/60"
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
             >
               <X size={20} />
             </button>
 
-            <h2 className="text-xl font-semibold text-white">Edit Prompt</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Edit Prompt</h2>
 
             <form onSubmit={handleUpdatePrompt} className="mt-6 space-y-5">
               <div>
-                <label className="text-sm text-white/70">Prompt Name</label>
+                <label className="text-sm text-gray-600">Prompt Name</label>
+
                 <input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="h-11 w-full rounded-xl bg-[#273449] px-4 text-white"
+                  className="h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-white/70">Content</label>
+                <label className="text-sm text-gray-600">Content</label>
+
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
                   rows={6}
-                  className="w-full rounded-xl bg-[#273449] px-4 py-3 text-white"
+                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
                 />
               </div>
 
-              <label className="flex items-center gap-3 text-sm text-white/70">
+              <label className="flex items-center gap-3 text-sm text-gray-600">
                 <input
                   type="checkbox"
                   checked={editActivate}
                   onChange={(e) => setEditActivate(e.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300"
                 />
                 Set as Active
               </label>
@@ -540,7 +445,7 @@ export default function PromptPage({ presets }: Props) {
                 <button
                   type="button"
                   onClick={closeEditModal}
-                  className="px-4 py-2 text-white/70"
+                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
                 >
                   Cancel
                 </button>
@@ -548,12 +453,56 @@ export default function PromptPage({ presets }: Props) {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="px-5 py-2 bg-indigo-600 rounded-lg text-white"
+                  className="px-5 py-2 bg-indigo-600 rounded-lg text-white hover:opacity-90 disabled:opacity-50"
                 >
                   {updating ? "Updating..." : "Update Prompt"}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* delete Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* overlay */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setDeleteTarget(null)}
+          />
+
+          {/* modal */}
+          <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Delete Prompt
+            </h3>
+
+            <p className="mt-2 text-sm text-gray-600">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold text-gray-900">
+                {deleteTarget.name}
+              </span>
+              ?
+            </p>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                disabled={deletingId === deleteTarget.id}
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleDeletePromptConfirmed}
+                disabled={deletingId === deleteTarget.id}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+              >
+                {deletingId === deleteTarget.id ? "Deleting..." : "Delete"}
+              </button>
+            </div>
           </div>
         </div>
       )}
