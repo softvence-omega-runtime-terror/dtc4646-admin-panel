@@ -51,6 +51,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         return "Model";
       case "/dashboard/prompt":
         return "Prompt";
+      case "/dashboard/provider":
+        return "Provider";
       default:
         return "Overview";
     }

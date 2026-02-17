@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Edit, Plus, X } from "lucide-react";
+import { Edit, Eye, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -29,6 +29,8 @@ type Props = {
 export default function PromptPage({ presets }: Props) {
   const router = useRouter();
 
+  console.log("--------presets------", presets);
+
   // normalize incoming data
   const incomingPrompts = useMemo<Preset[]>(() => {
     const arr = Array.isArray(presets?.data) ? presets.data : [];
@@ -53,10 +55,6 @@ export default function PromptPage({ presets }: Props) {
   const [newActivate, setNewActivate] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // ===== Activate form =====
-  const [selectedPromptId, setSelectedPromptId] = useState("");
-  const [activating, setActivating] = useState(false);
-
   // ===== edit form ====
   const [editOpen, setEditOpen] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState<Preset | null>(null);
@@ -65,10 +63,24 @@ export default function PromptPage({ presets }: Props) {
   const [deleteTarget, setDeleteTarget] = useState<Preset | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  // ====== see prompt====
+  const [viewOpen, setViewOpen] = useState(false);
+  const [viewPrompt, setViewPrompt] = useState<Preset | null>(null);
+
   const [editName, setEditName] = useState("");
   const [editContent, setEditContent] = useState("");
   const [editActivate, setEditActivate] = useState(false);
   const [updating, setUpdating] = useState(false);
+
+  function openViewModal(prompt: Preset) {
+    setViewPrompt(prompt);
+    setViewOpen(true);
+  }
+
+  function closeViewModal() {
+    setViewOpen(false);
+    setViewPrompt(null);
+  }
 
   function openEditModal(prompt: Preset) {
     setEditingPrompt(prompt);
@@ -136,11 +148,6 @@ export default function PromptPage({ presets }: Props) {
     setNewName("");
     setNewContent("");
     setNewActivate(false);
-  }
-
-  function closeActivate() {
-    setActivateOpen(false);
-    setSelectedPromptId("");
   }
 
   async function handleCreatePrompt(e: React.FormEvent) {
@@ -234,7 +241,7 @@ export default function PromptPage({ presets }: Props) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCreateOpen(true)}
-              className="rounded-lg bg-[#5B5FEA] px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90"
+              className="rounded-lg bg-gradient-to-r from-[#A78BFA] to-[#5835C0] px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90"
             >
               + Create Prompt
             </button>
@@ -274,6 +281,13 @@ export default function PromptPage({ presets }: Props) {
                     </div>
 
                     <div className="col-span-3 flex justify-end gap-2">
+                      <button
+                        onClick={() => openViewModal(p)}
+                        className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                      >
+                        <Eye size={16} />
+                      </button>
+
                       <button
                         onClick={() => openEditModal(p)}
                         className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
@@ -501,6 +515,45 @@ export default function PromptPage({ presets }: Props) {
                 className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
               >
                 {deletingId === deleteTarget.id ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {viewOpen && viewPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* overlay */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={closeViewModal}
+          />
+
+          {/* modal */}
+          <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl border border-gray-200">
+            <button
+              onClick={closeViewModal}
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+
+            <h3 className="text-lg font-semibold text-gray-900">
+              {viewPrompt.name}
+            </h3>
+
+            <p className="mt-1 text-sm text-gray-500">Prompt Content</p>
+
+            <div className="mt-4 max-h-[300px] overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 whitespace-pre-wrap">
+              {viewPrompt.content || "No content"}
+            </div>
+
+            <div className="mt-5 flex justify-end">
+              <button
+                onClick={closeViewModal}
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              >
+                Close
               </button>
             </div>
           </div>

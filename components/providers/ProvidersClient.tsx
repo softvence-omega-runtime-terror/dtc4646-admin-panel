@@ -102,7 +102,7 @@ export default function ProvidersClient({ providers }: Props) {
 
           <button
             onClick={() => openModal()}
-            className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:opacity-90"
+            className="rounded-lg bg-gradient-to-r from-[#A78BFA] to-[#5835C0] px-4 py-2 text-sm font-medium text-white shadow-sm hover:opacity-90"
           >
             + Add Provider
           </button>
