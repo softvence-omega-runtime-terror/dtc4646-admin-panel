@@ -29,6 +29,16 @@ export default function ProvidersClient({ providers }: Props) {
 
   const [deleteTarget, setDeleteTarget] = useState<Provider | null>(null);
 
+  // ===== pagination =====
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(providers.length / itemsPerPage);
+  const paginatedProviders = providers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
   function openModal(p?: Provider) {
     setSelected(p ?? null);
     setProviderName(p?.name ?? "");
@@ -92,10 +102,10 @@ export default function ProvidersClient({ providers }: Props) {
       <div className="">
         <div className="mb-6 flex flex-col sm:flex-row items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               AI Providers
             </h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-gray-500">
               Manage LLM connections and API keys
             </p>
           </div>
@@ -121,7 +131,7 @@ export default function ProvidersClient({ providers }: Props) {
               </div>
 
               <div className="divide-y divide-gray-100">
-                {providers.map((p) => (
+                {paginatedProviders.map((p) => (
                   <div
                     key={p.id}
                     role="button"
@@ -184,7 +194,7 @@ export default function ProvidersClient({ providers }: Props) {
                   </div>
                 ))}
 
-                {providers.length === 0 && (
+                {paginatedProviders.length === 0 && (
                   <div className="px-2 py-10 text-center text-sm text-gray-500">
                     No providers found.
                   </div>
@@ -193,6 +203,29 @@ export default function ProvidersClient({ providers }: Props) {
             </div>
           </div>
         </div>
+        {totalPages > 1 && (
+          <div className="mt-4 flex justify-end items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Prev
+            </button>
+
+            <span className="rounded-lg border border-[#A78BFA] bg-white px-3 py-1.5 text-sm font-semibold text-[#5835C0]">
+              {currentPage}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Modal */}
@@ -249,7 +282,7 @@ export default function ProvidersClient({ providers }: Props) {
                 <button
                   type="submit"
                   disabled={savingProvider}
-                  className="h-10 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="h-10 rounded-xl bg-gradient-to-r from-[#A78BFA] to-[#5835C0] px-5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {savingProvider ? "Saving..." : "Save Provider"}
                 </button>

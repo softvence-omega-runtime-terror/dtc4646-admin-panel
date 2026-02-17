@@ -29,7 +29,6 @@ type Props = {
 export default function PromptPage({ presets }: Props) {
   const router = useRouter();
 
-
   // normalize incoming data
   const incomingPrompts = useMemo<Preset[]>(() => {
     const arr = Array.isArray(presets?.data) ? presets.data : [];
@@ -65,6 +64,16 @@ export default function PromptPage({ presets }: Props) {
   // ====== see prompt====
   const [viewOpen, setViewOpen] = useState(false);
   const [viewPrompt, setViewPrompt] = useState<Preset | null>(null);
+
+  // ===== pagination ====
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(prompts.length / itemsPerPage);
+  const paginatedPrompts = prompts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
   const [editName, setEditName] = useState("");
   const [editContent, setEditContent] = useState("");
@@ -114,7 +123,6 @@ export default function PromptPage({ presets }: Props) {
 
       await updatePrompt(editingPrompt.id, payload);
 
-      // ✅ Instant UI update
       setPrompts((prev) =>
         prev.map((p) =>
           p.id === editingPrompt.id
@@ -229,10 +237,10 @@ export default function PromptPage({ presets }: Props) {
         {/* Header */}
         <div className="mb-6 flex flex-col sm:flex-row items-start justify-between gap-4">
           <div className="">
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               System Prompts
             </h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-gray-500">
               Persona library for AI interviews
             </p>
           </div>
@@ -258,7 +266,7 @@ export default function PromptPage({ presets }: Props) {
               </div>
 
               <div className="divide-y divide-gray-100">
-                {prompts.map((p) => (
+                {paginatedPrompts.map((p) => (
                   <div
                     key={p.id}
                     className="min-w-[480px] grid grid-cols-12 items-center gap-3 px-5 py-4 hover:bg-gray-50 transition"
@@ -289,7 +297,8 @@ export default function PromptPage({ presets }: Props) {
 
                       <button
                         onClick={() => openEditModal(p)}
-                        className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                        disabled={p.is_default}
+                        className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         <Edit size={16} />
                       </button>
@@ -305,7 +314,7 @@ export default function PromptPage({ presets }: Props) {
                   </div>
                 ))}
 
-                {prompts.length === 0 && (
+                {paginatedPrompts.length === 0 && (
                   <div className="px-5 py-10 text-center text-sm text-gray-500">
                     No prompts found.
                   </div>
@@ -314,9 +323,40 @@ export default function PromptPage({ presets }: Props) {
             </div>
           </div>
         </div>
-        <div className="mt-4 text-xs text-gray-500">
-          Active prompt:{" "}
-          <span className="text-gray-900">{activePrompt?.name ?? "None"}</span>
+        <div className="mt-4 flex items-center justify-between">
+          <div className="text-xs text-gray-500">
+            Active prompt:{" "}
+            <span className="text-gray-900">
+              {activePrompt?.name ?? "None"}
+            </span>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Prev
+              </button>
+
+              <span className="rounded-lg border border-[#A78BFA] bg-white px-3 py-1.5 text-sm font-semibold text-[#5835C0]">
+                {currentPage}
+              </span>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -391,7 +431,7 @@ export default function PromptPage({ presets }: Props) {
 
                 <button
                   type="submit"
-                  className="h-10 rounded-xl bg-[#5B5FEA] px-5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                  className="h-10 rounded-xl bg-gradient-to-r from-[#A78BFA] to-[#5835C0] px-5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
                   disabled={saving}
                 >
                   {saving ? "Creating..." : "Create Prompt"}
@@ -466,7 +506,7 @@ export default function PromptPage({ presets }: Props) {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="px-5 py-2 bg-indigo-600 rounded-lg text-white hover:opacity-90 disabled:opacity-50"
+                  className="px-5 py-2 bg-gradient-to-r from-[#A78BFA] to-[#5835C0] rounded-lg text-white hover:opacity-90 disabled:opacity-50"
                 >
                   {updating ? "Updating..." : "Update Prompt"}
                 </button>

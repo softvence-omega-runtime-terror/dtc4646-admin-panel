@@ -375,46 +375,46 @@ export default function UsersTable({ data }: Props) {
           users
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            disabled={isPending || currentPage <= 1}
-            onClick={() => go({ page: currentPage - 1 })}
-          >
-            Previous
-          </button>
+<div className="flex items-center gap-2">
+  <button
+    className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+    disabled={isPending || currentPage <= 1}
+    onClick={() => go({ page: currentPage - 1 })}
+  >
+    Prev
+  </button>
 
-          <div className="flex items-center gap-1">
-            {pageNumbers.map((n, idx) =>
-              n === -1 ? (
-                <span key={`gap-${idx}`} className="px-2 text-gray-500">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={n}
-                  disabled={isPending}
-                  onClick={() => go({ page: n })}
-                  className={`min-w-[40px] px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                    n === data.page
-                      ? "text-white bg-[#5835C0] border-[#5835C0]"
-                      : "text-gray-700 bg-white border-gray-300 hover:bg-[#5835C0] hover:text-white"
-                  }`}
-                >
-                  {n}
-                </button>
-              ),
-            )}
-          </div>
+  <div className="flex items-center gap-1">
+    {pageNumbers.map((n, idx) =>
+      n === -1 ? (
+        <span key={`gap-${idx}`} className="px-2 text-gray-500">
+          ...
+        </span>
+      ) : (
+        <button
+          key={n}
+          disabled={isPending}
+          onClick={() => go({ page: n })}
+          className={`min-w-[36px] rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors ${
+            n === data.page
+              ? "border-[#A78BFA] bg-white text-[#5835C0]"
+              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+          }`}
+        >
+          {n}
+        </button>
+      ),
+    )}
+  </div>
 
-          <button
-            className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-[#5835C0] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            disabled={isPending || currentPage >= data.totalPages}
-            onClick={() => go({ page: currentPage + 1 })}
-          >
-            Next
-          </button>
-        </div>
+  <button
+    className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+    disabled={isPending || currentPage >= data.totalPages}
+    onClick={() => go({ page: currentPage + 1 })}
+  >
+    Next
+  </button>
+</div>
       </div>
 
       {isDeleteOpen && (
