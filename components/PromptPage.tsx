@@ -29,7 +29,6 @@ type Props = {
 export default function PromptPage({ presets }: Props) {
   const router = useRouter();
 
-  console.log("--------presets------", presets);
 
   // normalize incoming data
   const incomingPrompts = useMemo<Preset[]>(() => {

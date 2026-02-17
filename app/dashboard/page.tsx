@@ -6,8 +6,6 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const configResult = await getAIConfig();
-  console.log("configResult", configResult)
-  
   if (!configResult.success && configResult.requiresLogin) {
     redirect("/login");
   }
