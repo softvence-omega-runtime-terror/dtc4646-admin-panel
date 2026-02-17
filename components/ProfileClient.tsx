@@ -47,8 +47,15 @@ export default function ProfileClient({ user }: Props) {
         setIsModalOpen(false);
         toast.success("Password changed successfully!");
       }, 2000);
-    } catch (err) {
-      toast.error("Something went wrong");
+    } catch (err: any) {
+      console.log(err);
+
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Something went wrong";
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -280,7 +287,7 @@ export default function ProfileClient({ user }: Props) {
                     setShowCurrentPassword(false);
                     setShowNewPassword(false);
                   }}
-                  className="flex-1 px-4 py-2.5 sm:py-3 bg-[#E4DBFD] rounded-lg font-medium text-[#8A5CF6] hover:bg-[#dfd3ff] transition-colors order-2 sm:order-1 cursor-pointer"
+                  className="flex-1 px-4 py-2.5 sm:py-3  rounded-lg font-medium text-[#8A5CF6] hover:bg-[#dfd3ff] bg-[#E4DBFD] transition-colors order-2 sm:order-1 cursor-pointer"
                   disabled={loading}
                 >
                   Cancel

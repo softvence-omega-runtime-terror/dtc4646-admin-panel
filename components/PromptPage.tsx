@@ -257,12 +257,12 @@ export default function PromptPage({ presets }: Props) {
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <div className="rounded-xl border border-gray-200 bg-white shadow-sm w-fit sm:w-full">
-            <div className="min-w-[480px]">
-              <div className="grid grid-cols-12 gap-3 border-b border-gray-200 px-5 py-3 text-xs font-medium text-gray-500">
+          <div className="rounded-xl border border-gray-200 bg-white shadow-sm w-fit lg:w-full">
+            <div className="min-w-[580px]">
+              <div className="grid grid-cols-12 gap-3 border-b border-gray-200 px-5 py-3 font-medium text-gray-500">
                 <div className="col-span-6">Prompt Name</div>
                 <div className="col-span-3">Status</div>
-                <div className="col-span-3 text-right">Actions</div>
+                <div className="col-span-3 text-center">Actions</div>
               </div>
 
               <div className="divide-y divide-gray-100">
@@ -287,7 +287,7 @@ export default function PromptPage({ presets }: Props) {
                       )}
                     </div>
 
-                    <div className="col-span-3 flex justify-end gap-2">
+                    <div className="col-span-3 flex justify-center gap-2 ">
                       <button
                         onClick={() => openViewModal(p)}
                         className="rounded-lg bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
@@ -377,9 +377,6 @@ export default function PromptPage({ presets }: Props) {
               Create Prompt
             </h2>
 
-            <p className="mt-1 text-sm text-gray-500">
-              Create a new system prompt preset.
-            </p>
 
             <form onSubmit={handleCreatePrompt} className="mt-6 space-y-5">
               <div>
@@ -391,7 +388,7 @@ export default function PromptPage({ presets }: Props) {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="career-coach-preset"
-                  className="h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
+                  className="h-11 w-full rounded-xl border border-[#967DE1] bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-1 focus:ring-[#967DE1]"
                 />
               </div>
 
@@ -405,7 +402,7 @@ export default function PromptPage({ presets }: Props) {
                   onChange={(e) => setNewContent(e.target.value)}
                   placeholder="Your preset content here..."
                   rows={6}
-                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
+                  className="w-full rounded-xl border border-[#967DE1] bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-1 focus:ring-[#967DE1]"
                 />
               </div>
 
@@ -414,7 +411,7 @@ export default function PromptPage({ presets }: Props) {
                   type="checkbox"
                   checked={newActivate}
                   onChange={(e) => setNewActivate(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-gray-300 accent-[#5835C0]"
                 />
                 Activate immediately
               </label>
@@ -423,7 +420,7 @@ export default function PromptPage({ presets }: Props) {
                 <button
                   type="button"
                   onClick={closeCreate}
-                  className="h-10 rounded-xl border border-gray-300 bg-white px-5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  className="h-10 rounded-xl bg-[#E4DBFD]  text-[#8A5CF6] hover:bg-[#dfd3ff] transition-colors cursor-pointer px-5 text-sm font-medium "
                   disabled={saving}
                 >
                   Cancel
@@ -469,7 +466,7 @@ export default function PromptPage({ presets }: Props) {
                 <input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
+                  className="h-11 w-full rounded-xl border border-[#967DE1] bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-1 focus:ring-[#967DE1]"
                 />
               </div>
 
@@ -480,7 +477,7 @@ export default function PromptPage({ presets }: Props) {
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
                   rows={6}
-                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/30"
+                  className="w-full rounded-xl border border-[#967DE1] bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-1 focus:ring-[#967DE1]"
                 />
               </div>
 
@@ -489,7 +486,7 @@ export default function PromptPage({ presets }: Props) {
                   type="checkbox"
                   checked={editActivate}
                   onChange={(e) => setEditActivate(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-gray-300 accent-[#5835C0]"
                 />
                 Set as Active
               </label>
@@ -498,7 +495,7 @@ export default function PromptPage({ presets }: Props) {
                 <button
                   type="button"
                   onClick={closeEditModal}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                  className="px-4 py-2 rounded-xl bg-[#E4DBFD] text-[#8A5CF6] hover:bg-[#dfd3ff] transition-colors cursor-pointer font-medium"
                 >
                   Cancel
                 </button>
@@ -542,7 +539,7 @@ export default function PromptPage({ presets }: Props) {
             <div className="mt-5 flex justify-end gap-3">
               <button
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-sm rounded-xl bg-[#E4DBFD] text-[#8A5CF6] hover:bg-[#dfd3ff] font-bold"
                 disabled={deletingId === deleteTarget.id}
               >
                 Cancel
@@ -551,7 +548,7 @@ export default function PromptPage({ presets }: Props) {
               <button
                 onClick={handleDeletePromptConfirmed}
                 disabled={deletingId === deleteTarget.id}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
               >
                 {deletingId === deleteTarget.id ? "Deleting..." : "Delete"}
               </button>
@@ -585,15 +582,6 @@ export default function PromptPage({ presets }: Props) {
 
             <div className="mt-4 max-h-[300px] overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 whitespace-pre-wrap">
               {viewPrompt.content || "No content"}
-            </div>
-
-            <div className="mt-5 flex justify-end">
-              <button
-                onClick={closeViewModal}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
-              >
-                Close
-              </button>
             </div>
           </div>
         </div>

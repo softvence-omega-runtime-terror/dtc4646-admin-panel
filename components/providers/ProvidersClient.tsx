@@ -74,7 +74,7 @@ export default function ProvidersClient({ providers }: Props) {
       closeModal();
       router.refresh();
     } catch (err: any) {
-      toast.error("Failed to create provider, name or API KEY wrong");
+      toast.error("Failed to create provider, wrong api key or name");
     } finally {
       setSavingProvider(false);
     }
@@ -120,10 +120,10 @@ export default function ProvidersClient({ providers }: Props) {
 
         {/* overflow-x-auto enables horizontal scroll on mobile */}
         <div className="overflow-x-auto">
-          <div className="w-fit sm:w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <div className="w-fit lg:w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
             {/* min-w wrapper stretches white bg with content */}
-            <div className="min-w-[520px]">
-              <div className="grid grid-cols-12 gap-3 border-b border-gray-200 px-2 pb-3 text-xs font-medium text-gray-500">
+            <div className="min-w-[670px]">
+              <div className="grid grid-cols-12 gap-3 border-b border-gray-200 px-2 pb-3  font-medium text-gray-500">
                 <div className="col-span-4">Name</div>
                 <div className="col-span-3">Status</div>
                 <div className="col-span-3">Type</div>
@@ -252,7 +252,7 @@ export default function ProvidersClient({ providers }: Props) {
                   value={providerName}
                   onChange={(e) => setProviderName(e.target.value)}
                   placeholder="OpenAI"
-                  className="h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  className="h-11 w-full rounded-xl border bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA]"
                 />
               </div>
 
@@ -265,7 +265,7 @@ export default function ProvidersClient({ providers }: Props) {
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   placeholder="sk-..."
-                  className="h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  className="h-11 w-full rounded-xl border bg-white px-4 text-sm text-gray-900 border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA] placeholder:text-gray-400 outline-none "
                 />
               </div>
 
@@ -274,7 +274,7 @@ export default function ProvidersClient({ providers }: Props) {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="h-10 rounded-xl border border-gray-300 bg-white px-5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  className="h-10 rounded-xl px-5 text-sm font-medium text-[#8A5CF6] hover:bg-[#dfd3ff] bg-[#E4DBFD] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -322,7 +322,7 @@ export default function ProvidersClient({ providers }: Props) {
             <div className="mt-5 flex justify-end gap-3">
               <button
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-sm text-[#8A5CF6] hover:bg-[#dfd3ff] bg-[#E4DBFD] transition-colors rounded-xl font-medium"
                 disabled={deletingId === deleteTarget.id}
               >
                 Cancel
@@ -331,7 +331,7 @@ export default function ProvidersClient({ providers }: Props) {
               <button
                 onClick={onDeleteConfirmed}
                 disabled={deletingId === deleteTarget.id}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
               >
                 {deletingId === deleteTarget.id ? "Deleting..." : "Delete"}
               </button>

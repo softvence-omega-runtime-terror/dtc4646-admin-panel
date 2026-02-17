@@ -158,12 +158,8 @@ export default function UsersTable({ data }: Props) {
 
       <div className=" md:flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Users
-          </h1>
-          <p className="text-gray-600">
-            View and manage registered users
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Users</h1>
+          <p className="text-gray-600">View and manage registered users</p>
         </div>
       </div>
       {/* Controls Bar */}
@@ -189,7 +185,6 @@ export default function UsersTable({ data }: Props) {
               <span className="text-gray-600">entries</span>
             </div>
 
-            {/* ✅ Your Delete design */}
             <button
               type="button"
               onClick={() => setIsDeleteOpen(true)}
@@ -375,46 +370,46 @@ export default function UsersTable({ data }: Props) {
           users
         </div>
 
-<div className="flex items-center gap-2">
-  <button
-    className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
-    disabled={isPending || currentPage <= 1}
-    onClick={() => go({ page: currentPage - 1 })}
-  >
-    Prev
-  </button>
+        <div className="flex items-center gap-2">
+          <button
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled={isPending || currentPage <= 1}
+            onClick={() => go({ page: currentPage - 1 })}
+          >
+            Prev
+          </button>
 
-  <div className="flex items-center gap-1">
-    {pageNumbers.map((n, idx) =>
-      n === -1 ? (
-        <span key={`gap-${idx}`} className="px-2 text-gray-500">
-          ...
-        </span>
-      ) : (
-        <button
-          key={n}
-          disabled={isPending}
-          onClick={() => go({ page: n })}
-          className={`min-w-[36px] rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors ${
-            n === data.page
-              ? "border-[#A78BFA] bg-white text-[#5835C0]"
-              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          {n}
-        </button>
-      ),
-    )}
-  </div>
+          <div className="flex items-center gap-1">
+            {pageNumbers.map((n, idx) =>
+              n === -1 ? (
+                <span key={`gap-${idx}`} className="px-2 text-gray-500">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={n}
+                  disabled={isPending}
+                  onClick={() => go({ page: n })}
+                  className={`min-w-[36px] rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors ${
+                    n === data.page
+                      ? "border-[#A78BFA] bg-white text-[#5835C0]"
+                      : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {n}
+                </button>
+              ),
+            )}
+          </div>
 
-  <button
-    className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
-    disabled={isPending || currentPage >= data.totalPages}
-    onClick={() => go({ page: currentPage + 1 })}
-  >
-    Next
-  </button>
-</div>
+          <button
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled={isPending || currentPage >= data.totalPages}
+            onClick={() => go({ page: currentPage + 1 })}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {isDeleteOpen && (
@@ -444,19 +439,19 @@ export default function UsersTable({ data }: Props) {
                 <button
                   type="button"
                   onClick={() => setIsDeleteOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="px-4 py-2 rounded-xl text-[#8A5CF6] hover:bg-[#dfd3ff] bg-[#E4DBFD] transition-colors text-sm font-medium "
                   disabled={isPending}
                 >
-                  No, cancel
+                  Cancel
                 </button>
 
                 <button
                   type="button"
                   onClick={handleDeleteSelected}
-                  className="px-4 py-2 rounded-lg bg-red-600 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl bg-red-600 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
                   disabled={isPending}
                 >
-                  {isPending ? "Deleting..." : "Yes, delete"}
+                  {isPending ? "Deleting..." : "Delete"}
                 </button>
               </div>
             </div>

@@ -39,7 +39,6 @@ export default function ConfigClient({ providers, prompts }: Props) {
 
         setModels(list);
 
-        // ✅ Keep current model if it exists in the new list
         setModel((prev) => {
           if (prev && list.includes(prev)) return prev;
           return list[0] ?? "";
@@ -103,7 +102,7 @@ export default function ConfigClient({ providers, prompts }: Props) {
               <select
                 value={providerId}
                 onChange={(e) => setProviderId(e.target.value)}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-gray-900 outline-none focus:ring-2 focus:ring-[#A78BFA]"
+                className="h-11 w-full rounded-lg border px-4 text-gray-900 outline-none border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA]"
               >
                 {providers.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -122,7 +121,7 @@ export default function ConfigClient({ providers, prompts }: Props) {
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 disabled={loadingModels || models.length === 0}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-gray-900 outline-none focus:ring-2 focus:ring-[#A78BFA] disabled:opacity-60"
+                className="h-11 w-full rounded-lg border px-4 text-gray-900 outline-none border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA] disabled:opacity-60"
               >
                 {loadingModels ? (
                   <option value="">Loading models...</option>
@@ -146,7 +145,7 @@ export default function ConfigClient({ providers, prompts }: Props) {
               <select
                 value={promptId}
                 onChange={(e) => setPromptId(e.target.value)}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-gray-900 outline-none focus:ring-2 focus:ring-[#A78BFA]"
+                className="h-11 w-full rounded-lg border px-4 text-gray-900 outline-none border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA]"
               >
                 {prompts.map((p) => (
                   <option key={p.id} value={p.id}>
