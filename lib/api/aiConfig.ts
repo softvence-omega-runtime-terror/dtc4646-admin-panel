@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL_DEV;
 
-if (!BASE_URL) throw new Error("NEXT_PUBLIC_API_URL_DEV is not defined");
+if (!BASE_URL)
+  throw new Error("AI config NEXT_PUBLIC_API_URL_DEV is not defined");
 
 type APIResult<T> =
   | { success: true; data: T }
@@ -12,13 +13,17 @@ type APIResult<T> =
 
 async function authenticatedFetch(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<APIResult<any>> {
   const cookieStore = await cookies();
   const authToken = cookieStore.get("auth_token")?.value;
 
   if (!authToken) {
-    return { success: false, error: "Authentication required", requiresLogin: true };
+    return {
+      success: false,
+      error: "Authentication required",
+      requiresLogin: true,
+    };
   }
 
   const res = await fetch(url, {

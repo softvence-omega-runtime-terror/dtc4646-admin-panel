@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL_DEV;
 
-if (!BASE_URL) throw new Error("NEXT_PUBLIC_API_URL_DEV is not defined");
+if (!BASE_URL)
+  throw new Error("Provider NEXT_PUBLIC_API_URL_DEV is not defined");
 
 export async function getProviders(): Promise<any> {
   const cookieStore = await cookies();
@@ -70,7 +71,7 @@ export async function createProvider(payload: CreateProviderPayload) {
 
   if (!res.ok) {
     throw new Error(
-      `Failed to create provider: ${res.status} ${res.statusText} - ${text}`
+      `Failed to create provider: ${res.status} ${res.statusText} - ${text}`,
     );
   }
 
@@ -131,7 +132,7 @@ export async function deleteProvider(id: string): Promise<any> {
 
   if (!res.ok) {
     throw new Error(
-      `Failed to delete provider: ${res.status} ${res.statusText} - ${text}`
+      `Failed to delete provider: ${res.status} ${res.statusText} - ${text}`,
     );
   }
 

@@ -1,3 +1,5 @@
+"use server";
+
 import Cookies from "js-cookie";
 
 type ChangePasswordPayload = {
