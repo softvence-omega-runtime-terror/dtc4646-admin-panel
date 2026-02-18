@@ -248,12 +248,19 @@ export default function ProvidersClient({ providers }: Props) {
                   Provider Name
                 </label>
 
-                <input
+                <select
                   value={providerName}
                   onChange={(e) => setProviderName(e.target.value)}
-                  placeholder="OpenAI"
-                  className="h-11 w-full rounded-xl border bg-white px-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA]"
-                />
+                  className="h-11 w-full rounded-xl border bg-white px-4 text-sm text-gray-900 outline-none border-[#967DE1] focus:ring-1 focus:ring-[#A78BFA] cursor-pointer"
+                >
+                  <option value="" disabled>
+                    Select a provider
+                  </option>
+                  <option value="openai">OpenAI</option>
+                  <option value="gemini">Google Gemini</option>
+                  <option value="anthropic">Anthropic</option>
+                  <option value="groq">Groq</option>
+                </select>
               </div>
 
               <div>
