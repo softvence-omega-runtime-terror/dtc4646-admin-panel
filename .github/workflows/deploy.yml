@@ -93,7 +93,7 @@ jobs:
             docker compose down dashboard --remove-orphans
 
             # Pull the latest images
-            docker compose pull
+            docker compose pull dashboard
 
             # Start containers in detached mode
             docker compose up dashboard -d
