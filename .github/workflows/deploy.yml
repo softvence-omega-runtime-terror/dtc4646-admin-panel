@@ -76,17 +76,27 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            cd dashboard
+            cd ai
 
             # Stop and remove existing containers safely
-            docker compose down --remove-orphans
             
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd ai
+
+            # Stop and remove existing containers safely
+            docker compose down dashboard --remove-orphans
+
             # Pull the latest images
             docker compose pull
 
-
             # Start containers in detached mode
-            docker compose up -d
+            docker compose up dashboard -d
 
             # Prune unused Docker objects (optional, cleans disk)
             docker system prune -f
