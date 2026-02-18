@@ -20,7 +20,7 @@ type Props = {
 export default function ProvidersClient({ providers }: Props) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<Provider | null>(null);
+  const [selected, setSelected] = useState<Provider | null>(null);  
 
   const [providerName, setProviderName] = useState("");
   const [apiKey, setApiKey] = useState("");

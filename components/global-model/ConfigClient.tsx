@@ -5,7 +5,9 @@ import toast from "react-hot-toast";
 import { getProviderModels } from "@/lib/api/provider";
 import { updateGlobalAIConfig } from "@/lib/api/aiConfigPresets";
 
-type Provider = { id: string; name: string };
+type Provider = {
+  is_active: unknown; id: string; name: string 
+};
 type Prompt = { id: string; name: string; is_active: boolean };
 
 type Props = {
@@ -14,12 +16,15 @@ type Props = {
 };
 
 export default function ConfigClient({ providers, prompts }: Props) {
-  const [providerId, setProviderId] = useState(providers?.[0]?.id ?? "");
+  console.log(providers);
+  const [providerId, setProviderId] = useState(
+    providers.find((p) => p?.is_active)?.id ?? providers?.[0]?.id ?? "",
+  );
   const [models, setModels] = useState<string[]>([]);
   const [model, setModel] = useState<string>("");
 
   const [promptId, setPromptId] = useState(
-    prompts.find((p) => p.is_active)?.id ?? prompts?.[0]?.id ?? ""
+    prompts.find((p) => p.is_active)?.id ?? prompts?.[0]?.id ?? "",
   );
 
   const [loadingModels, setLoadingModels] = useState(false);
