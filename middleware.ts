@@ -5,6 +5,17 @@ const PUBLIC_PATHS = [
   "/register",
   "/forgot-password",
   "/forgot-password/verify",
+  "/terms-and-conditions",
+  "/terms",
+  "/privacy-policy",
+  "/privacy",
+  "/help-center",
+  "/help",
+  "/support",
+  "/about-us",
+  "/about",
+  "/contact-us",
+  "/contact",
 ];
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL_DEV ?? "";
 console.log(BASE_URL);
