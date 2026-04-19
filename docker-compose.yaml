@@ -1,12 +1,12 @@
 services:
   dashboard:
+    image: softvence/dtc6464_web:latest
     container_name: dtc6464_web
     build:
       context: .
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL_DEV: https://api.datatechcon.com/api/v1
-    image: softvence/dtc6464_web:latest
     ports:
       - "3000:3000"
     restart: always
