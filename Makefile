@@ -1,4 +1,4 @@
 build:
-	docker compose build --no-cache
+	docker compose build dashboard --no-cache
 push:
-	docker compose push
+	docker compose push dashboard

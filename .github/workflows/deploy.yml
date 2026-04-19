@@ -32,6 +32,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          platforms: linux/amd64
           tags: ${{ secrets.DOCKER_USERNAME }}/dtc6464_web:latest
           build-args: |
             NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
@@ -61,24 +62,13 @@ jobs:
             cd ai
 
             # Stop and remove existing containers safely
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          script: |
-            cd ai
-
-            # Stop and remove existing containers safely
             docker compose down dashboard --remove-orphans
+
+            # Prune unused Docker objects (optional, cleans disk)
+            docker system prune -af
 
             # Pull the latest images
             docker compose pull dashboard
 
             # Start containers in detached mode
-            docker compose dashboard -d
-
-            # Prune unused Docker objects (optional, cleans disk)
-            docker system prune -f
+            docker compose up dashboard -d
