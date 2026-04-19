@@ -2,6 +2,7 @@ services:
   dashboard:
     image: softvence/dtc6464_web:latest
     container_name: dtc6464_web
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
