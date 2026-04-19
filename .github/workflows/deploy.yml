@@ -22,6 +22,9 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+      - name: Create .env file for build purpose
+        run: |
+          echo "NEXT_PUBLIC_API_URL_DEV=${{ secrets.NEXT_PUBLIC_API_URL_DEV }}" > .env
 
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
